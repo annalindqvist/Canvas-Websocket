@@ -15,11 +15,19 @@
       <input type="text" id="nickname" placeholder="Enter nickname">
       <button id="setNickname">Set nickname</button>
   
-      <!-- input chat -->
-      <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
+      
+      
   
       <!-- DOM chat -->
-      <ul id="conversation"></ul>
+      <div id="chat">
+        <ul id="chatThread"></ul>
+        <!-- input chat -->
+        <div id="chatInput">
+            <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
+        </div>
+    
+      </div>
+      
   
       <!-- use template to set html structure for a message -->
       <template id="message">
@@ -27,7 +35,7 @@
           <li>
               <span></span>
               <p></p>
-              <time datetime=""></time>
+              <p id="time"></p>
           </li>
   
       </template>

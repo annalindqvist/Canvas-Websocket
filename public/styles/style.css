@@ -1,15 +1,24 @@
-ul {
-    margin: 2rem 0;
-    padding: 0;
+#chat {
+    border: 3px solid blue;
+    width: 80vw;
+    height: 90vh;
+    position: relative;
+}
+#chatThread {
     list-style: none;
 }
-
-li {
-    display: grid;
-    /* child elements */
-    grid-template-columns: 1fr 5fr 1fr;
+#chatThread li {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
-li p {
-    margin: 0
+#chatInput {
+    position: absolute;
+    bottom: 10px;
+}
+#chatInput #inputText {
+    padding: 0.5rem;
+    border: 2px solid blueviolet;
+    margin: 1rem;
 }

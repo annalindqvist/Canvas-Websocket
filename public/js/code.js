@@ -1,16 +1,13 @@
 // DOM elements
 const inputText = document.getElementById("inputText");
 const setNickname = document.querySelector("#setNickname");
-
+const chatThread = document.getElementById("chatThread");
 
 // variable current user | nickname
 let nickname;
 
-
 // use WebSocket >>> make sure server uses same ws port!
 const websocket = new WebSocket("ws://localhost:80");  
-
-
 
 
 /* event listeners
@@ -78,12 +75,16 @@ inputText.addEventListener("keydown", (event) => {
 });
 
 
-
-
-
 /* functions...
 ------------------------------- */
 
+function currentTime() {
+
+    let dayTime = new Date();
+    // time right now with output: 12:00
+    let time = dayTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    return time;
+}
 
 /**
  * parse JSON
@@ -119,18 +120,10 @@ function renderMessage(obj) {
     newMsg.querySelector("span").textContent = obj.nickname;
     newMsg.querySelector("p").textContent = obj.msg;
 
-    // new date object
-    let objDate = new Date();
-
-    // visual: 10:41 .. 9:5 ... leading zero....
-    newMsg.querySelector("time").textContent =
-        objDate.getHours() + ":" + objDate.getMinutes();
-
-    // set datetime attribute - see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/time
-    newMsg
-        .querySelector("time")
-        .setAttribute("datetime", objDate.toISOString());
+    // visual: 10:41
+    newMsg.getElementById("time").innerText = currentTime();
 
     // render using prepend method - last message first
-    document.getElementById("conversation").prepend(newMsg);
+    chatThread.appendChild(newMsg);
 }
+
