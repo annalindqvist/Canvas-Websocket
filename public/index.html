@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,40 +8,46 @@
     <link rel="stylesheet" href="styles/style.css">
     <title>Document</title>
 </head>
-<body>
-      <!-- server status -->
-      <div id="status"></div>
 
-      <!-- input nickname -->
-      <input type="text" id="nickname" placeholder="Enter nickname">
-      <button id="setNickname">Set nickname</button>
-  
-      
-      
-  
-      <!-- DOM chat -->
-      <div id="chat">
+<body>
+    <!-- server status -->
+    <div id="status"></div>
+
+    <!-- input nickname -->
+    <input type="text" id="nickname" placeholder="Enter nickname">
+    <button id="setNickname">Set nickname</button>
+
+
+
+
+    <!-- DOM chat -->
+    <div id="chat">
         <ul id="chatThread"></ul>
         <!-- input chat -->
         <div id="chatInput">
             <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
+            <button id="sendMsgBtn">Send</button>
         </div>
-    
-      </div>
-      
-  
-      <!-- use template to set html structure for a message -->
-      <template id="message">
-  
-          <li>
-              <span></span>
-              <p></p>
-              <p id="time"></p>
-          </li>
-  
-      </template>
-  
-      <script src="js/code.js"></script>
-  
+
+    </div>
+
+    <div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- use template to set html structure for a message -->
+    <template id="message">
+
+        <li>
+            <span></span>
+            <p></p>
+            <p id="time"></p>
+        </li>
+
+    </template>
+
+    <script src="js/code.js"></script>
+
 </body>
+
 </html>
