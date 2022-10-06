@@ -154,23 +154,34 @@ function init(e) {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext('2d');
 
-    console.log('This is the context', ctx);
+    let startX = e.clientX - canvas.offsetLeft;
+    let startY = e.clientY - canvas.offsetTop;
+    console.log("staryX", startX)
+    console.log("staryX", startY)
     // Paints crazy.. paintbrush is way down than mouse.. 
-    console.log(window.innerWidth, window.innerHeight)
     const canvasOffsetX = canvas.offsetLeft;
     const canvasOffsetY = canvas.offsetTop;
-    canvas.width = window.innerWidth - canvasOffsetX;
-    canvas.height = window.innerHeight - canvasOffsetY;
+    const chat = document.getElementById("chat");
+    console.log("chat", chat.offsetTop)
 
-    let lineWidth = 5;
-    let startX;
-    let startY;
+    console.log(canvasOffsetX)
+    console.log("canvasoffsetx", canvasOffsetX)
+    console.log("canvasoffsety", canvasOffsetY)
 
+    // canvas.width = window.innerWidth - canvasOffsetX;
+    // canvas.height = window.innerHeight - canvasOffsetY;
+    canvas.width = 300;
+    canvas.height = 300;
+
+    let lineWidth = 10;
+   
+    console.log("canvas X O Y", ctx)
     let isPainting = false;
     const initPaint = (e) => {
         isPainting = true;
-        startX = e.clientX;
-        startY = e.clientY;
+        startX = e.offsetX;
+        startY = chat.offsetTop;
+        console.log("initpaint X", startX)
         paint(e); // needed to be able to make dots
     };
 
@@ -182,16 +193,12 @@ function init(e) {
 
     const paint = (e) => {
         if (!isPainting) return;
-        // ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI); // Draw 10px radius circle
-        // ctx.fill() // hmmm... 
-        // ctx.beginPath();
-
+        
         ctx.lineWidth = lineWidth;
         ctx.lineCap = 'round';
-
-        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+        console.log("paint X", e.clientX)
+        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - chat.offsetTop);
         ctx.stroke();
-        // Perhaps something else needed?
     };
     canvas.onmousedown = initPaint;
     canvas.onmousemove = paint;
