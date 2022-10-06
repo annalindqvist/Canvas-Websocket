@@ -23,17 +23,19 @@
     <!-- DOM chat -->
     <div id="chat">
         <ul id="chatThread"></ul>
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
         <!-- input chat -->
         <div id="chatInput">
+            <button id="drawBtn">Draw</button>
             <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
             <button id="sendMsgBtn">Send</button>
         </div>
 
     </div>
 
-    <div>
-        <canvas id="canvas"></canvas>
-    </div>
+    
 
     <!-- use template to set html structure for a message -->
     <template id="message">

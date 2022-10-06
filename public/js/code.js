@@ -4,6 +4,7 @@ const setNickname = document.querySelector("#setNickname");
 const chatThread = document.getElementById("chatThread");
 // Send btn in input msg....s
 const sendBtn = document.getElementById("sendMsgBtn");
+const drawBtn = document.getElementById("drawBtn");
 
 // variable current user | nickname
 let nickname;
@@ -135,6 +136,18 @@ function renderMessage(obj) {
     chatThread.appendChild(newMsg);
 }
 
+drawBtn.addEventListener('click', (e) => {
+    console.log("drawBtn");
+    if (canvas.style.display = "none") {
+        console.log("none")
+        canvas.style.display = "block";
+    }
+    // else if (canvas.style.display = "block") {
+    //     console.log("block")
+    //     canvas.style.display = "none";
+    // }
+
+});
 
 
 function init(e) {
@@ -144,29 +157,45 @@ function init(e) {
     console.log('This is the context', ctx);
     // Paints crazy.. paintbrush is way down than mouse.. 
     console.log(window.innerWidth, window.innerHeight)
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const canvasOffsetX = canvas.offsetLeft;
+    const canvasOffsetY = canvas.offsetTop;
+    canvas.width = window.innerWidth - canvasOffsetX;
+    canvas.height = window.innerHeight - canvasOffsetY;
+
+    let lineWidth = 5;
+    let startX;
+    let startY;
 
     let isPainting = false;
     const initPaint = (e) => {
         isPainting = true;
+        startX = e.clientX;
+        startY = e.clientY;
         paint(e); // needed to be able to make dots
     };
 
     const finishPaint = () => {
         isPainting = false;
+        ctx.stroke();
+        ctx.beginPath();
     };
 
     const paint = (e) => {
         if (!isPainting) return;
-        ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI); // Draw 10px radius circle
-        ctx.fill() // hmmm... 
-        ctx.beginPath();
+        // ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI); // Draw 10px radius circle
+        // ctx.fill() // hmmm... 
+        // ctx.beginPath();
+
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+
+        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+        ctx.stroke();
         // Perhaps something else needed?
     };
     canvas.onmousedown = initPaint;
     canvas.onmousemove = paint;
-    canvas.onmouseup = finishPaint;
+    window.onmouseup = finishPaint;
 
 }
 

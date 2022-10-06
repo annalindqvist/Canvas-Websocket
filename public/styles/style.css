@@ -24,7 +24,10 @@
 }
 #canvas {
     margin: 1rem;
-    width: 300px;
+    width: 300;
     height: 300px;
     border: 2px solid green;
+    display: none;
+    position: absolute;
+    top: 0;
 }
