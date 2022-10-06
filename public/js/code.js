@@ -2,6 +2,8 @@
 const inputText = document.getElementById("inputText");
 const setNickname = document.querySelector("#setNickname");
 const chatThread = document.getElementById("chatThread");
+const chat = document.getElementById("chat");
+const canvas = document.getElementById("canvas");
 // Send btn in input msg....s
 const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
@@ -137,31 +139,31 @@ function renderMessage(obj) {
 }
 
 drawBtn.addEventListener('click', (e) => {
-    console.log("drawBtn");
-    if (canvas.style.display = "none") {
-        console.log("none")
-        canvas.style.display = "block";
+    console.log("drawBtn", e);
+    if (canvas.style.display != "block") {
+        console.log("none", canvas);
+        canvas.style.display = 'block';
     }
-    // else if (canvas.style.display = "block") {
-    //     console.log("block")
-    //     canvas.style.display = "none";
-    // }
+    
+    else if (canvas.style.display = "block") {
+        console.log("block");
+        canvas.style.display = 'none';
+    }
+    console.log("canvas", canvas)
 
 });
 
 
 function init(e) {
-    const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext('2d');
 
     let startX = e.clientX - canvas.offsetLeft;
     let startY = e.clientY - canvas.offsetTop;
     console.log("staryX", startX)
     console.log("staryX", startY)
-    // Paints crazy.. paintbrush is way down than mouse.. 
+
     const canvasOffsetX = canvas.offsetLeft;
     const canvasOffsetY = canvas.offsetTop;
-    const chat = document.getElementById("chat");
     console.log("chat", chat.offsetTop)
 
     console.log(canvasOffsetX)
