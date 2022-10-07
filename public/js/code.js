@@ -59,26 +59,40 @@ setNickname.addEventListener("click", () => {
     document.getElementById("inputText").focus();
 });
 
-inputText.addEventListener("keydown", (event) => {
+inputText.addEventListener("keydown", (e) => {
     // press Enter...make sure at least one char
 
-    if (event.key === "Enter" && inputText.value.length > 0) {
-        // chat message object
-        let objMessage = {
-            msg: inputText.value,
-            nickname: nickname,
-        };
-
-        // show new message for this user
-        renderMessage(objMessage);
-
-        // send to server
-        websocket.send(JSON.stringify(objMessage));
-
-        // reset input field
-        inputText.value = "";
+    if (e.key === "Enter" && inputText.value.length > 0) {
+       
+        handleMessage();
     }
 });
+
+sendBtn.addEventListener("click", (e) => {
+
+    if (e.target == sendBtn && inputText.value.length > 0) {
+       
+        handleMessage();
+    }
+});
+
+function handleMessage() {
+
+    let objMessage = {
+        msg: inputText.value,
+        nickname: nickname,
+    };
+
+    // show new message for this user
+    renderMessage(objMessage);
+
+    // send to server
+    websocket.send(JSON.stringify(objMessage));
+
+    // reset input field
+    inputText.value = "";
+
+}
 
 
 /* functions...
