@@ -28,20 +28,24 @@ websocket.addEventListener("close", (event) => {
 websocket.addEventListener("message", (event) => {
     // console.log(event.data);
 
+    console.log("Event", event)
     let obj = parseJSON(event.data);
-
+    console.log("objjj", obj)
     // todo
     // use obj property 'type' to handle message event
     switch (obj.type) {
         case "text":
+            obj.type = "text"
             break;
-        case "somethingelse":
+        case "image":
+            obj.type = "image"
             break;
         default:
             break;
     }
 
     // ...
+   
     renderMessage(obj);
 });
 
@@ -76,7 +80,11 @@ sendBtn.addEventListener("click", (e) => {
     }
 });
 
+//let imgUrl = canvas.toDataURL();
+
 function handleMessage() {
+
+   
 
     let objMessage = {
         msg: inputText.value,
@@ -91,6 +99,7 @@ function handleMessage() {
 
     // reset input field
     inputText.value = "";
+
 
 }
 
@@ -138,8 +147,17 @@ function renderMessage(obj) {
     // use template - cloneNode to get a document fragment
     let template = document.getElementById("message").cloneNode(true);
 
+    console.log("obj", obj)
+
     // access content
     let newMsg = template.content;
+
+    // gets an div with background img of canvas but doesnt show what i painted.. only white..
+
+    // let imgTag = document.createElement("div");
+    // imgTag.style.backgroundImage = `url(${obj.msg})`;
+    // chatThread.appendChild(imgTag);
+    // console.log("imgtag", imgTag);
 
     // change content...
     newMsg.querySelector("span").textContent = obj.nickname;
@@ -150,6 +168,11 @@ function renderMessage(obj) {
 
     // render using prepend method - last message first
     chatThread.appendChild(newMsg);
+}
+
+
+function openCloseCanvas(e) {
+
 }
 
 drawBtn.addEventListener('click', (e) => {
@@ -205,6 +228,8 @@ function init(e) {
         isPainting = false;
         ctx.stroke();
         ctx.beginPath();
+
+       
     };
 
     const paint = (e) => {
@@ -223,3 +248,31 @@ function init(e) {
 }
 
 window.onload = init;
+
+
+function saveImgToUrl() {
+    let img = canvas.toDataURL();
+    handleMessage(img);
+
+}
+
+
+// async function submitImgToServer() {
+
+//     let imgBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+//     let formData = new FormData();
+//     formData.append("image", imgBlob, "image.png");
+
+//     let response = await fetch("http://localhost:80/image", {
+//         method: 'POST',
+//         body: formData
+//     });
+
+//     let result = await response.json();
+
+//     console.log("result", result)
+// }
+
+
+

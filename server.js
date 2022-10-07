@@ -83,7 +83,7 @@ wss.on("connection", (ws) => {
         // console.log('Message received: %s', data);
 
         let obj = parseJSON(data);
-
+        console.log(obj)
         // todo
         // use obj property 'type' to handle message event
         switch (obj.type) {
