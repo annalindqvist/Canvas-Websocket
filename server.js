@@ -92,7 +92,7 @@ wss.on("connection", (ws) => {
 
         let obj = parseJSON(data);
         console.log(obj)
-        let objBroadcast = {}
+        let objBroadcast = {};
         // todo
         // use obj property 'type' to handle message event
         switch (obj.type) {
@@ -104,7 +104,7 @@ wss.on("connection", (ws) => {
                     msg: obj.msg,
                     nickname: obj.nickname,
                 };
-
+                console.log("case text", objBroadcast)
                 // broadcast to all but this ws...
                 broadcastButExclude(wss, ws, objBroadcast);
 
@@ -116,6 +116,7 @@ wss.on("connection", (ws) => {
                     msg: obj.msg,
                     nickname: obj.nickname,
                 };
+                console.log("case url", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
                 break;
             default:

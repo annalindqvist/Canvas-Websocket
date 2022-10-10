@@ -35,7 +35,7 @@ websocket.addEventListener("message", (event) => {
     // use obj property 'type' to handle message event
     switch (obj.type) {
         case "text":
-            obj.type = "text"
+            renderMessage(obj);
             break;
         case "url":
             console.log("test url", obj)
@@ -47,7 +47,7 @@ websocket.addEventListener("message", (event) => {
 
     // ...
    
-    renderMessage(obj);
+    //renderMessage(obj);
 });
 
 setNickname.addEventListener("click", () => {
@@ -88,6 +88,7 @@ function handleMessage() {
    
 
     let objMessage = {
+        type: "text",
         msg: inputText.value,
         nickname: nickname,
     };
@@ -100,7 +101,6 @@ function handleMessage() {
 
     // reset input field
     inputText.value = "";
-
 
 }
 
@@ -154,11 +154,6 @@ function renderMessage(obj) {
     let newMsg = template.content;
 
     // gets an div with background img of canvas but doesnt show what i painted.. only white..
-
-    // let imgTag = document.createElement("div");
-    // imgTag.style.backgroundImage = `url(${obj.msg})`;
-    // chatThread.appendChild(imgTag);
-    // console.log("imgtag", imgTag);
 
     // change content...
     newMsg.getElementById("msgNickname").innerText = obj.nickname;
