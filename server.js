@@ -6,17 +6,23 @@ import express from "express";
 import http from "http";
 
 // use websocket server
-import { WebSocketServer } from "ws";
+import {
+    WebSocketServer
+} from "ws";
 
 // import functions
-import { parseJSON, broadcast, broadcastButExclude } from "./libs/functions.js";
+import {
+    parseJSON,
+    broadcast,
+    broadcastButExclude
+} from "./libs/functions.js";
 
 
 
 /* application variables
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
-const port = 80; 
+const port = 80;
 
 
 
@@ -36,7 +42,9 @@ app.use(express.static("public"));
 const server = http.createServer(app);
 
 // create WebSocket server - use a predefined server
-const wss = new WebSocketServer({ noServer: true });
+const wss = new WebSocketServer({
+    noServer: true
+});
 
 
 
@@ -84,26 +92,45 @@ wss.on("connection", (ws) => {
 
         let obj = parseJSON(data);
         console.log(obj)
+        let objBroadcast = {}
         // todo
         // use obj property 'type' to handle message event
         switch (obj.type) {
             case "text":
+                // chatt historik i "state"objekt? /array?  payload
+                // message to clients
+                objBroadcast = {
+                    type: "text",
+                    msg: obj.msg,
+                    nickname: obj.nickname,
+                };
+
+                // broadcast to all but this ws...
+                broadcastButExclude(wss, ws, objBroadcast);
+
                 break;
-            case "somethingelse":
+
+            case "url":
+                objBroadcast = {
+                    type: "url",
+                    msg: obj.msg,
+                    nickname: obj.nickname,
+                };
+                broadcastButExclude(wss, ws, objBroadcast);
                 break;
             default:
                 break;
         }
 
-        // message to clients
-        let objBroadcast = {
-            type: "text",
-            msg: obj.msg,
-            nickname: obj.nickname,
-        };
+        // // message to clients
+        // let objBroadcast = {
+        //     type: "text",
+        //     msg: obj.msg,
+        //     nickname: obj.nickname,
+        // };
 
-        // broadcast to all but this ws...
-        broadcastButExclude(wss, ws, objBroadcast);
+        // // broadcast to all but this ws...
+        // broadcastButExclude(wss, ws, objBroadcast);
     });
 });
 

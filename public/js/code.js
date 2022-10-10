@@ -37,8 +37,9 @@ websocket.addEventListener("message", (event) => {
         case "text":
             obj.type = "text"
             break;
-        case "image":
-            obj.type = "image"
+        case "url":
+            console.log("test url", obj)
+            renderImgMsg(obj)
             break;
         default:
             break;
@@ -160,11 +161,11 @@ function renderMessage(obj) {
     // console.log("imgtag", imgTag);
 
     // change content...
-    newMsg.querySelector("span").textContent = obj.nickname;
-    newMsg.querySelector("p").textContent = obj.msg;
+    newMsg.getElementById("msgNickname").innerText = obj.nickname;
+    newMsg.getElementById("chatMsgContent").innerText = obj.msg;
 
     // visual: 10:41
-    newMsg.getElementById("time").innerText = currentTime();
+    newMsg.getElementById("msgTime").innerText = currentTime();
 
     // render using prepend method - last message first
     chatThread.appendChild(newMsg);
@@ -185,6 +186,7 @@ drawBtn.addEventListener('click', (e) => {
     else if (canvas.style.display = "block") {
         console.log("block");
         canvas.style.display = 'none';
+        saveImgToUrl()
     }
     console.log("canvas", canvas)
 
@@ -217,6 +219,7 @@ function init(e) {
     console.log("canvas X O Y", ctx)
     let isPainting = false;
     const initPaint = (e) => {
+       // ctx.fillStyle = "white";
         isPainting = true;
         startX = e.offsetX;
         startY = chat.offsetTop;
@@ -250,29 +253,48 @@ function init(e) {
 window.onload = init;
 
 
-function saveImgToUrl() {
-    let img = canvas.toDataURL();
-    handleMessage(img);
+const saveImgToUrl =  () => {
+
+   // let webgl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
+    //console.log("webgl", webgl)
+    //let img = canvas.toDataURL("image/png").split(';base64,')[1];
+    let img = canvas.toDataURL('image/png');
+    console.log("img", img)
+    let imgSubst = img.substr(img.indexOf(',')+1).toString()
+    console.log("img", imgSubst)
+
+
+    let imgMsg = {
+        type: "url",
+        msg: imgSubst,
+        nickname: nickname,
+    };
+
+    // send to server
+    websocket.send(JSON.stringify(imgMsg));
+
+    // let imgTag = document.createElement("div");
+    // imgTag.style.backgroundImage = `url(${img})`;
+    // chatThread.appendChild(imgTag);
+
+   
+
+    //console.log("img", img)
+   // console.log("imgTag", imgTag);
+    
 
 }
 
+function renderImgMsg (obj) {
 
-// async function submitImgToServer() {
+    let imgTag = document.createElement("div");
+    imgTag.style.backgroundImage = `url(${obj.url})`;
+    chatThread.appendChild(imgTag);
 
-//     let imgBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    chatThread.appendChild(imgTag)
 
-//     let formData = new FormData();
-//     formData.append("image", imgBlob, "image.png");
+}
 
-//     let response = await fetch("http://localhost:80/image", {
-//         method: 'POST',
-//         body: formData
-//     });
-
-//     let result = await response.json();
-
-//     console.log("result", result)
-// }
 
 
 
