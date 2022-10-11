@@ -35,6 +35,7 @@ websocket.addEventListener("message", (event) => {
     // use obj property 'type' to handle message event
     switch (obj.type) {
         case "text":
+            console.log("text körs")
             renderMessage(obj);
             break;
         case "url":
@@ -44,10 +45,7 @@ websocket.addEventListener("message", (event) => {
         default:
             break;
     }
-
-    // ...
    
-    //renderMessage(obj);
 });
 
 setNickname.addEventListener("click", () => {
@@ -81,11 +79,7 @@ sendBtn.addEventListener("click", (e) => {
     }
 });
 
-//let imgUrl = canvas.toDataURL();
-
 function handleMessage() {
-
-   
 
     let objMessage = {
         type: "text",
@@ -172,19 +166,16 @@ function openCloseCanvas(e) {
 }
 
 drawBtn.addEventListener('click', (e) => {
-    console.log("drawBtn", e);
     if (canvas.style.display != "block") {
         console.log("none", canvas);
         canvas.style.display = 'block';
     }
     
     else if (canvas.style.display = "block") {
-        console.log("block");
+        console.log("drawBtn onclick: canvas display: block");
         canvas.style.display = 'none';
         saveImgToUrl()
     }
-    console.log("canvas", canvas)
-
 });
 
 
@@ -193,16 +184,9 @@ function init(e) {
 
     let startX = e.clientX - canvas.offsetLeft;
     let startY = e.clientY - canvas.offsetTop;
-    console.log("staryX", startX)
-    console.log("staryX", startY)
 
     const canvasOffsetX = canvas.offsetLeft;
     const canvasOffsetY = canvas.offsetTop;
-    console.log("chat", chat.offsetTop)
-
-    console.log(canvasOffsetX)
-    console.log("canvasoffsetx", canvasOffsetX)
-    console.log("canvasoffsety", canvasOffsetY)
 
     // canvas.width = window.innerWidth - canvasOffsetX;
     // canvas.height = window.innerHeight - canvasOffsetY;
@@ -211,14 +195,13 @@ function init(e) {
 
     let lineWidth = 10;
    
-    console.log("canvas X O Y", ctx)
     let isPainting = false;
     const initPaint = (e) => {
        // ctx.fillStyle = "white";
         isPainting = true;
         startX = e.offsetX;
         startY = chat.offsetTop;
-        console.log("initpaint X", startX)
+       // console.log("initpaint X", startX)
         paint(e); // needed to be able to make dots
     };
 
@@ -235,7 +218,7 @@ function init(e) {
         
         ctx.lineWidth = lineWidth;
         ctx.lineCap = 'round';
-        console.log("paint X", e.clientX)
+        //console.log("paint X", e.clientX)
         ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - chat.offsetTop);
         ctx.stroke();
     };
@@ -247,49 +230,31 @@ function init(e) {
 
 window.onload = init;
 
-
 const saveImgToUrl =  () => {
 
-   // let webgl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
-    //console.log("webgl", webgl)
-    //let img = canvas.toDataURL("image/png").split(';base64,')[1];
     let img = canvas.toDataURL('image/png');
-    console.log("img", img)
-    let imgSubst = img.substr(img.indexOf(',')+1).toString()
-    console.log("img", imgSubst)
-
+    console.log("saveImgToUrl", img)
+    // let imgSubst = img.substr(img.indexOf(',')+1).toString()
+    // console.log("img", imgSubst)
 
     let imgMsg = {
         type: "url",
-        msg: imgSubst,
+        msg: img,
         nickname: nickname,
     };
-
+    console.log("imgMsg", imgMsg)
+    renderImgMsg(imgMsg)
     // send to server
     websocket.send(JSON.stringify(imgMsg));
-
-    // let imgTag = document.createElement("div");
-    // imgTag.style.backgroundImage = `url(${img})`;
-    // chatThread.appendChild(imgTag);
-
-   
-
-    //console.log("img", img)
-   // console.log("imgTag", imgTag);
-    
 
 }
 
 function renderImgMsg (obj) {
 
-    let imgTag = document.createElement("div");
-    imgTag.style.backgroundImage = `url(${obj.url})`;
+    console.log(obj.msg)
+    let imgTag = document.createElement("img");
+    imgTag.src = obj.msg;
+
     chatThread.appendChild(imgTag);
 
-    chatThread.appendChild(imgTag)
-
 }
-
-
-
-
