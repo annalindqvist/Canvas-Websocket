@@ -45,7 +45,7 @@ websocket.addEventListener("message", (event) => {
         default:
             break;
     }
-   
+
 });
 
 setNickname.addEventListener("click", () => {
@@ -53,20 +53,25 @@ setNickname.addEventListener("click", () => {
     nickname = document.getElementById("nickname").value;
 
     // if set - disable input nickname
-    document.getElementById("nickname").setAttribute("disabled", true);
+    // document.getElementById("nickname").setAttribute("disabled", true);
 
-    // enable input field
-    document.getElementById("inputText").removeAttribute("disabled");
+    // // enable input field
+    // document.getElementById("inputText").removeAttribute("disabled");
 
-    // focus input field
-    document.getElementById("inputText").focus();
+    // // focus input field
+    // document.getElementById("inputText").focus();
+
+    const logInContainer = document.getElementById("logIn");
+    logInContainer.style.display = 'none';
+    chat.style.display = 'block';
+
 });
 
 inputText.addEventListener("keydown", (e) => {
     // press Enter...make sure at least one char
 
     if (e.key === "Enter" && inputText.value.length > 0) {
-       
+
         handleMessage();
     }
 });
@@ -74,7 +79,7 @@ inputText.addEventListener("keydown", (e) => {
 sendBtn.addEventListener("click", (e) => {
 
     if (e.target == sendBtn && inputText.value.length > 0) {
-       
+
         handleMessage();
     }
 });
@@ -161,17 +166,20 @@ function renderMessage(obj) {
 }
 
 
-function openCloseCanvas(e) {
+function clearCanvas() {
+    const ctx = canvas.getContext('2d');
+
+    // White clear background of the canvas
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 }
 
 drawBtn.addEventListener('click', (e) => {
     if (canvas.style.display != "block") {
-        console.log("none", canvas);
+        clearCanvas()
         canvas.style.display = 'block';
-    }
-    
-    else if (canvas.style.display = "block") {
+    } else if (canvas.style.display = "block") {
         console.log("drawBtn onclick: canvas display: block");
         canvas.style.display = 'none';
         saveImgToUrl()
@@ -182,26 +190,31 @@ drawBtn.addEventListener('click', (e) => {
 function init(e) {
     const ctx = canvas.getContext('2d');
 
-    let startX = e.clientX - canvas.offsetLeft;
-    let startY = e.clientY - canvas.offsetTop;
+    const rect = canvas.getBoundingClientRect()
+    // const x = e.clientX - rect.left
+    // const y = e.clientY - rect.top
+    // console.log("x: " + x + " y: " + y)
+    console.log("canvas.getBoundingClientRect(),", canvas.getBoundingClientRect())
 
-    const canvasOffsetX = canvas.offsetLeft;
-    const canvasOffsetY = canvas.offsetTop;
+    let startX = e.clientX - rect.left;
+    let startY = e.clientY - rect.top;
 
-    // canvas.width = window.innerWidth - canvasOffsetX;
-    // canvas.height = window.innerHeight - canvasOffsetY;
-    canvas.width = 300;
-    canvas.height = 300;
+    // const canvasOffsetX = canvas.offsetLeft;
+    // const canvasOffsetY = canvas.offsetTop;
 
-    let lineWidth = 10;
-   
+    canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
+    canvas.height = window.innerHeight - 200;
+    // canvas.width = 300;
+    // canvas.height = 300;
+
+    let lineWidth = 20;
+
     let isPainting = false;
     const initPaint = (e) => {
-       // ctx.fillStyle = "white";
         isPainting = true;
-        startX = e.offsetX;
-        startY = chat.offsetTop;
-       // console.log("initpaint X", startX)
+        // startX = e.offsetX;
+        // startY = chat.offsetTop;
+        // console.log("initpaint X", startX)
         paint(e); // needed to be able to make dots
     };
 
@@ -209,17 +222,15 @@ function init(e) {
         isPainting = false;
         ctx.stroke();
         ctx.beginPath();
-
-       
     };
 
     const paint = (e) => {
         if (!isPainting) return;
-        
+
         ctx.lineWidth = lineWidth;
         ctx.lineCap = 'round';
         //console.log("paint X", e.clientX)
-        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - chat.offsetTop);
+        ctx.lineTo(e.clientX - chat.offsetLeft - lineWidth * 0.5, e.clientY - chat.offsetTop - lineWidth * 0.5);
         ctx.stroke();
     };
     canvas.onmousedown = initPaint;
@@ -230,7 +241,7 @@ function init(e) {
 
 window.onload = init;
 
-const saveImgToUrl =  () => {
+const saveImgToUrl = () => {
 
     let img = canvas.toDataURL('image/png');
     console.log("saveImgToUrl", img)
@@ -249,7 +260,7 @@ const saveImgToUrl =  () => {
 
 }
 
-function renderImgMsg (obj) {
+function renderImgMsg(obj) {
 
     console.log(obj.msg)
     let imgTag = document.createElement("img");

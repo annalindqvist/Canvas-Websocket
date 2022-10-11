@@ -14,8 +14,11 @@
     <div id="status"></div>
 
     <!-- input nickname -->
-    <input type="text" id="nickname" placeholder="Enter nickname">
-    <button id="setNickname">Set nickname</button>
+    <div id="logIn">
+        <input type="text" id="nickname" placeholder="Enter nickname">
+        <button id="setNickname">Set nickname</button>
+    </div>
+
 
 
 
@@ -24,12 +27,12 @@
     <div id="chat">
         <ul id="chatThread"></ul>
 
-        <canvas id="canvas" width="300" height="300" display="none"></canvas>
+        <canvas id="canvas" display="none"></canvas>
 
         <!-- input chat -->
         <div id="chatInput">
             <button id="drawBtn">Draw</button>
-            <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
+            <input type="text" id="inputText" placeholder="Ps. only nice messages goes here">
             <button id="sendMsgBtn">Send</button>
         </div>
 
@@ -41,7 +44,9 @@
 
         <li>
             <p id="msgNickname"></p>
-            <div id="chatMsgContainer"><p id="chatMsgContent"></p></div>
+            <div id="chatMsgContainer">
+                <p id="chatMsgContent"></p>
+            </div>
             <p id="msgTime"></p>
         </li>
 
