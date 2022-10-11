@@ -119,6 +119,14 @@ wss.on("connection", (ws) => {
                 console.log("case url", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
                 break;
+            case "newClient": {
+                objBroadcast = {
+                    type: "newClient",
+                    nickname: obj.nickname,
+                }
+                console.log("case newClient", objBroadcast)
+                broadcastButExclude(wss, ws, objBroadcast);
+            }
             default:
                 break;
         }

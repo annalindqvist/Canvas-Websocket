@@ -36,12 +36,17 @@ websocket.addEventListener("message", (event) => {
     switch (obj.type) {
         case "text":
             console.log("text körs")
-            renderMessage(obj);
+            let className = "alignLeft";
+            renderMessage(obj, className);
             break;
         case "url":
             console.log("test url", obj)
             renderImgMsg(obj)
             break;
+        case "newClient": {
+            console.log("new client", obj.nickname)
+            newClientLogIn(obj)
+        }
         default:
             break;
     }
@@ -52,14 +57,17 @@ setNickname.addEventListener("click", () => {
     // get value from input nickname
     nickname = document.getElementById("nickname").value;
 
-    // if set - disable input nickname
-    // document.getElementById("nickname").setAttribute("disabled", true);
+    let objMessage = {
+        type: "newClient",
+        nickname: nickname,
+    };
 
-    // // enable input field
-    // document.getElementById("inputText").removeAttribute("disabled");
+    // show new message for this user
+    
 
-    // // focus input field
-    // document.getElementById("inputText").focus();
+    // send new login/new client to server
+    websocket.send(JSON.stringify(objMessage));
+
 
     const logInContainer = document.getElementById("logIn");
     logInContainer.style.display = 'none';
@@ -93,7 +101,8 @@ function handleMessage() {
     };
 
     // show new message for this user
-    renderMessage(objMessage);
+    let className = "alignRight";
+    renderMessage(objMessage, className);
 
     // send to server
     websocket.send(JSON.stringify(objMessage));
@@ -143,16 +152,14 @@ function parseJSON(data) {
  *
  * @param {obj}
  */
-function renderMessage(obj) {
+function renderMessage(obj, className) {
     // use template - cloneNode to get a document fragment
     let template = document.getElementById("message").cloneNode(true);
-
-    console.log("obj", obj)
 
     // access content
     let newMsg = template.content;
 
-    // gets an div with background img of canvas but doesnt show what i painted.. only white..
+    newMsg.querySelector("li").className = className;
 
     // change content...
     newMsg.getElementById("msgNickname").innerText = obj.nickname;
@@ -162,6 +169,16 @@ function renderMessage(obj) {
     newMsg.getElementById("msgTime").innerText = currentTime();
 
     // render using prepend method - last message first
+    chatThread.appendChild(newMsg);
+}
+
+function newClientLogIn (obj) {
+
+     // use template - cloneNode to get a document fragment
+    let template = document.getElementById("message").cloneNode(true);
+    // access content
+    let newMsg = template.content;
+    newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
     chatThread.appendChild(newMsg);
 }
 

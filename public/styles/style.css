@@ -36,8 +36,11 @@
     border: 1px solid red;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    
+    
     position: relative;
+
+
     margin: 1rem;
 }
 
@@ -47,9 +50,14 @@
     border-radius: 2rem;
 
 }
-
-#msgTime, #msgNickname {
+#msgTime {
     font-size: 12px;
+}
+
+#msgNickname {
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
 }
 
 #chatInput {
@@ -80,4 +88,14 @@
 img {
     max-width: 50%;
     max-height: 50%;
+}
+
+.alignLeft {
+    background-color: crimson;
+    justify-content: left;
+}
+
+.alignRight {
+    background-color: cyan;
+    justify-content: right;
 }
