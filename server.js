@@ -16,6 +16,7 @@ import {
     broadcast,
     broadcastButExclude
 } from "./libs/functions.js";
+import { v4 as uuidv4 } from "uuid";
 
 
 
@@ -48,6 +49,8 @@ const wss = new WebSocketServer({
 
 
 
+
+
 /* allow websockets - listener
 ------------------------------- */
 // upgrade event - websocket communication
@@ -67,7 +70,13 @@ server.on("upgrade", (req, socket, head) => {
     });
 });
 
+let connectedClients = [];
+let disconnectedClient;
 
+wss.uniqueId = function () {
+    let id = uuidv4();
+    return id;
+}
 
 /* listen on new websocket connections
 ------------------------------- */
@@ -75,15 +84,35 @@ wss.on("connection", (ws) => {
     console.log("New client connection from IP: ", ws._socket.remoteAddress);
     console.log("Number of connected clients: ", wss.clients.size);
 
+    ws.id = wss.uniqueId();
+
+    wss.clients.forEach(client => {
+        console.log("client id: ", client.id)
+        // client.send(`{"id": "${client.id}}`)
+    })
+
     // WebSocket events (ws) for single client
 
     // close event
     ws.on("close", () => {
-        console.log("Client disconnected");
+        // får ut id:t på den som lämnar men vill använda nickname för att skriva ut det i chatten?
+        console.log("Client disconnected", ws.id);
         console.log(
             "Number of remaining connected clients: ",
             wss.clients.size
         );
+
+        disconnectedClient = connectedClients.filter(c => c.id === ws.id);
+        let remaningClients = connectedClients.filter(c => c.id !== ws.id)
+        console.log("disconnectedCLients", remaningClients)
+            console.log("disconnected clients", disconnectedClient)
+
+        wss.clients.forEach(client => {
+
+           client.send(JSON.stringify({type: 'disconnect', onlineClients: remaningClients, disconnectedClient: disconnectedClient[0]}))
+        });
+
+        // console.log("test connectedclients", connectedClients)
     });
 
     // message event
@@ -120,26 +149,33 @@ wss.on("connection", (ws) => {
                 broadcastButExclude(wss, ws, objBroadcast);
                 break;
             case "newClient": {
+                const id = ws.id;
+
                 objBroadcast = {
                     type: "newClient",
                     nickname: obj.nickname,
-                }
+                    id: id,
+                };
+
+                connectedClients.push(objBroadcast);
+
                 console.log("case newClient", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
             }
+            // case "clientDisconnected": {
+            //     const id = ws.id;
+
+            //     objBroadcast = {
+            //         type: "clientDisconnected",
+            //         nickname: obj.nickname,
+            //         id: id,
+            //     }
+            //     console.log("case clientDisconnected", objBroadcast)
+            //     broadcastButExclude(wss, ws, objBroadcast);
+            // }
             default:
                 break;
         }
-
-        // // message to clients
-        // let objBroadcast = {
-        //     type: "text",
-        //     msg: obj.msg,
-        //     nickname: obj.nickname,
-        // };
-
-        // // broadcast to all but this ws...
-        // broadcastButExclude(wss, ws, objBroadcast);
     });
 });
 

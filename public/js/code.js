@@ -44,8 +44,16 @@ websocket.addEventListener("message", (event) => {
             renderImgMsg(obj)
             break;
         case "newClient": {
-            console.log("new client", obj.nickname)
+            console.log("new client", obj.nickname, obj.id)
             newClientLogIn(obj)
+            //onlineClients(obj);
+        }
+        case "disconnect": {
+            //console.log(obj); 
+            //onlineClients(obj);
+            console.log(obj)
+            clientDisconnected(obj.disconnectedClient)
+            break;
         }
         default:
             break;
@@ -62,13 +70,10 @@ setNickname.addEventListener("click", () => {
         nickname: nickname,
     };
 
-    // show new message for this user
-    
-
     // send new login/new client to server
     websocket.send(JSON.stringify(objMessage));
 
-
+    // hide login container and show chat
     const logInContainer = document.getElementById("logIn");
     logInContainer.style.display = 'none';
     chat.style.display = 'block';
@@ -101,6 +106,7 @@ function handleMessage() {
     };
 
     // show new message for this user
+    // className to show my messages to right
     let className = "alignRight";
     renderMessage(objMessage, className);
 
@@ -152,6 +158,11 @@ function parseJSON(data) {
  *
  * @param {obj}
  */
+
+// SKAPA SWITCH STATEMENT FÖR rendeimg, rendertext, render new client to ul..? 
+// kommer det fungera att deklarera chatthread inne i render message verkligen? kommer li elementen hänga med ? 
+// vad menade henry egentligen med att irl är det dåligt att deklarera chat thread högst upp i koden ? 
+//varför skuille den ligga i render img funktionen?
 function renderMessage(obj, className) {
     // use template - cloneNode to get a document fragment
     let template = document.getElementById("message").cloneNode(true);
@@ -159,6 +170,7 @@ function renderMessage(obj, className) {
     // access content
     let newMsg = template.content;
 
+    // class to style element to right or left in chat
     newMsg.querySelector("li").className = className;
 
     // change content...
@@ -170,15 +182,48 @@ function renderMessage(obj, className) {
 
     // render using prepend method - last message first
     chatThread.appendChild(newMsg);
+
+    // switch (obj.type) {
+    //     // case "text":
+    //     //     console.log("text körs")
+    //     //     let className = "alignLeft";
+    //     //     renderMessage(obj, className);
+    //     //     break;
+    //     case "url":
+    //         console.log("test url", obj)
+    //         let imgTag = document.createElement("img");
+    //         imgTag.src = obj.msg;
+    //         newMsg.getElementById("msgNickname").innerText = obj.nickname;
+
+    //         chatThread.appendChild(imgTag);
+
+    //         break;
+    //     case "newClient": {
+    //         console.log("new client", obj.nickname)
+    //         newClientLogIn(obj)
+    //     }
+    //     default:
+    //         break;
+    // }
 }
 
-function newClientLogIn (obj) {
+function newClientLogIn(obj) {
 
-     // use template - cloneNode to get a document fragment
+    // use template - cloneNode to get a document fragment
     let template = document.getElementById("message").cloneNode(true);
     // access content
     let newMsg = template.content;
     newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
+    chatThread.appendChild(newMsg);
+}
+
+function clientDisconnected(obj) {
+
+    // use template - cloneNode to get a document fragment
+    let template = document.getElementById("message").cloneNode(true);
+    // access content
+    let newMsg = template.content;
+    newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just left the chat.";
     chatThread.appendChild(newMsg);
 }
 
@@ -284,5 +329,23 @@ function renderImgMsg(obj) {
     imgTag.src = obj.msg;
 
     chatThread.appendChild(imgTag);
+
+}
+
+let onlineClientsContainer = document.getElementById("onlineClients");
+
+function onlineClients(obj) {
+    console.log("connected clients are: ", obj)
+    console.log("test test")
+
+    
+    if (obj.nickname) {
+        const nameBubble = document.createElement("div");
+        nameBubble.id = obj.id;
+        nameBubble.innerText = obj.nickname;
+        // foreach nickname create div with nickname
+        
+        onlineClientsContainer.appendChild(nameBubble)
+    }
 
 }
