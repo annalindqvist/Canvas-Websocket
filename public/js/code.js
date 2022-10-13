@@ -31,17 +31,20 @@ websocket.addEventListener("message", (event) => {
     console.log("Event", event)
     let obj = parseJSON(event.data);
     console.log("objjj", obj)
+    let className = "alignLeft";
     // todo
     // use obj property 'type' to handle message event
     switch (obj.type) {
         case "text":
             //console.log("text körs")
-            let className = "alignLeft";
+
             renderMessage(obj, className);
             break;
         case "url":
             //console.log("test url", obj)
-            renderImgMsg(obj)
+
+            renderMessage(obj, className);
+            //renderImgMsg(obj)
             break;
         case "newClient": {
             newClientLogIn(obj)
@@ -163,47 +166,67 @@ function parseJSON(data) {
 // vad menade henry egentligen med att irl är det dåligt att deklarera chat thread högst upp i koden ? 
 //varför skuille den ligga i render img funktionen?
 function renderMessage(obj, className) {
-    // use template - cloneNode to get a document fragment
-    let template = document.getElementById("message").cloneNode(true);
+    // // use template - cloneNode to get a document fragment
+    // let template = document.getElementById("message").cloneNode(true);
 
-    // access content
-    let newMsg = template.content;
+    // //console.log("test render", obj)
+    // // access content
+    // let newMsg = template.content;
 
-    // class to style element to right or left in chat
-    newMsg.querySelector("li").className = className;
+    // // class to style element to right or left in chat
+    // newMsg.querySelector("li").className = className;
 
-    // change content...
-    newMsg.getElementById("msgNickname").innerText = obj.nickname;
-    newMsg.getElementById("chatMsgContent").innerText = obj.msg;
+    // // change content...
+    // newMsg.getElementById("msgNickname").innerText = obj.nickname;
+    // newMsg.getElementById("chatMsgContent").innerText = obj.msg;
 
-    // visual: 10:41
-    newMsg.getElementById("msgTime").innerText = currentTime();
+    // // visual: 10:41
+    // newMsg.getElementById("msgTime").innerText = currentTime();
 
-    // render using prepend method - last message first
-    chatThread.appendChild(newMsg);
+    // // render using prepend method - last message first
+    // chatThread.appendChild(newMsg);
 
-    // switch (obj.type) {
-    //     // case "text":
-    //     //     console.log("text körs")
-    //     //     let className = "alignLeft";
-    //     //     renderMessage(obj, className);
-    //     //     break;
-    //     case "url":
-    //         console.log("test url", obj)
-    //         let imgTag = document.createElement("img");
-    //         imgTag.src = obj.msg;
-    //         newMsg.getElementById("msgNickname").innerText = obj.nickname;
+    switch (obj.type) {
 
-    //         chatThread.appendChild(imgTag);
 
-    //         break;
-    //     case "newClient": {
-    //         console.log("new client", obj.nickname)
-    //         newClientLogIn(obj)
-    //     }
-    //     default:
-    //         break;
-    // }
+        case "text":
+            // use template - cloneNode to get a document fragment
+            let template = document.getElementById("message").cloneNode(true);
+            // access content
+            let newMsg = template.content;
+            // change content...
+            newMsg.getElementById("msgNickname").innerText = obj.nickname;
+            newMsg.getElementById("chatMsgContent").innerText = obj.msg;
+            // class to style element to right or left in chat
+            newMsg.querySelector("li").className = className;
+            // visual: 10:41
+            newMsg.getElementById("msgTime").innerText = currentTime();
+            // render using prepend method - last message first
+            chatThread.appendChild(newMsg);
+
+            break;
+        case "url":
+            // use IMG template - cloneNode to get a document fragment
+            let imgTemplate = document.getElementById("imgMessage").cloneNode(true);
+            // access content
+            let newImgMsg = imgTemplate.content;
+            newImgMsg.getElementById("imgMsg").src = obj.msg;
+            newImgMsg.getElementById("imgMsgNickname").innerText = obj.nickname;
+            newImgMsg.getElementById("imgMsgTime").innerText = currentTime();
+            chatThread.appendChild(newImgMsg);
+
+
+            break;
+            // case "newClient": {
+            //     console.log("new client", obj.nickname)
+            //     newClientLogIn(obj)
+            // }
+        default:
+            break;
+    }
+
+
+
 }
 
 function newClientLogIn(obj) {
@@ -315,7 +338,8 @@ const saveImgToUrl = () => {
         nickname: nickname,
     };
     console.log("imgMsg", imgMsg)
-    renderImgMsg(imgMsg)
+    //renderImgMsg(imgMsg)
+    renderMessage(imgMsg)
     // send to server
     websocket.send(JSON.stringify(imgMsg));
 
@@ -334,7 +358,7 @@ function renderImgMsg(obj) {
 let onlineClientsContainer = document.getElementById("onlineClients");
 
 function onlineClients(obj) {
-    
+
     console.log("connected clients are: ", obj)
 
     onlineClientsContainer.innerHTML = '';
@@ -343,7 +367,7 @@ function onlineClients(obj) {
         //console.log("client", client)
         const nameBubble = document.createElement("div");
         nameBubble.innerText = client.nickname;
-        
+
         onlineClientsContainer.appendChild(nameBubble)
     });
 
