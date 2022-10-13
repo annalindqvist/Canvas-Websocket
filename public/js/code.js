@@ -39,15 +39,18 @@ websocket.addEventListener("message", (event) => {
             //console.log("text körs")
 
             renderMessage(obj, className);
+            isTypingContainer.innerHTML = "";
             break;
         case "url":
             //console.log("test url", obj)
 
             renderMessage(obj, className);
+            isTypingContainer.innerHTML = "";
             //renderImgMsg(obj)
             break;
         case "newClient": {
-            newClientLogIn(obj)
+            // newClientLogIn(obj)
+            renderMessage(obj)
             //console.log("newClient test", obj)
             onlineClients(obj.onlineClients);
         }
@@ -56,6 +59,10 @@ websocket.addEventListener("message", (event) => {
             onlineClients(obj.onlineClients);
             clientDisconnected(obj.disconnectedClient)
             break;
+        }
+        case "someoneIsTyping": {
+            renderSomeoneIsTyping(obj)
+            console.log("someoneistyping arr", obj.timeOfPress)
         }
         default:
             break;
@@ -83,21 +90,60 @@ setNickname.addEventListener("click", () => {
 });
 
 inputText.addEventListener("keydown", (e) => {
-    // press Enter...make sure at least one char
 
+    // if (inputText.value.length > 0) {
+    //     someoneIsTyping("start");
+    // }
+    // if (inputText.value.length < 0) {
+    //     someoneIsTyping("stop");
+    // }
+    // press Enter & make sure at least one char to send handleMessage function
     if (e.key === "Enter" && inputText.value.length > 0) {
 
         handleMessage();
     }
 });
 
+inputText.addEventListener("keypress", (e) => {
+    console.log(e)
+
+    // time of keypress
+    let timestamp = new Date(e.timeStamp);
+    //console.log("time", timestamp);
+    //timestamp = timestamp.toTimeString().split(' ')[0];
+    console.log("timestamp", timestamp);
+
+    let objMessage = {
+        type: "someoneIsTyping",
+        nickname: nickname,
+        time: timestamp,
+    };
+
+    websocket.send(JSON.stringify(objMessage));
+})
+
 sendBtn.addEventListener("click", (e) => {
 
     if (e.target == sendBtn && inputText.value.length > 0) {
 
         handleMessage();
+        isTypingContainer.innerHTML = "";
     }
 });
+
+// function someoneIsTyping(info) {
+//     console.log("test someoneistyping")
+
+//     //console.log("info", info)
+
+//     let objMessage = {
+//         type: "someoneIsTyping",
+//         msg: info,
+//         nickname: nickname,
+//     };
+
+//     websocket.send(JSON.stringify(objMessage));
+// }
 
 function handleMessage() {
 
@@ -155,16 +201,28 @@ function parseJSON(data) {
     }
 }
 
+const isTypingContainer = document.getElementById("isTypingContainer");
+
+function renderSomeoneIsTyping(obj) {
+
+    // if (obj.msg === "stop") {
+    //     isTypingContainer.innerHTML = "";
+    // } else if (obj.msg === "start") {
+        isTypingContainer.innerHTML = "";
+        let whoIsTyping = document.createElement("p");
+        whoIsTyping.innerText = obj.nickname + " " + "is typing..";
+        isTypingContainer.appendChild(whoIsTyping);
+    // }
+
+}
+
 /**
  * render new message
  *
  * @param {obj}
  */
 
-// SKAPA SWITCH STATEMENT FÖR rendeimg, rendertext, render new client to ul..? 
-// kommer det fungera att deklarera chatthread inne i render message verkligen? kommer li elementen hänga med ? 
-// vad menade henry egentligen med att irl är det dåligt att deklarera chat thread högst upp i koden ? 
-//varför skuille den ligga i render img funktionen?
+
 function renderMessage(obj, className) {
     // // use template - cloneNode to get a document fragment
     // let template = document.getElementById("message").cloneNode(true);
@@ -218,30 +276,35 @@ function renderMessage(obj, className) {
 
 
             break;
-            // case "newClient": {
-            //     console.log("new client", obj.nickname)
-            //     newClientLogIn(obj)
-            // }
+        case "newClient": {
+            // use template - cloneNode to get a document fragment
+            let template = document.getElementById("message").cloneNode(true);
+            // access content
+            let newMsg = template.content;
+            newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
+            newMsg.getElementById("msgTime").innerText = currentTime();
+            chatThread.appendChild(newMsg);
+        }
         default:
             break;
     }
-
-
-
 }
 
-function newClientLogIn(obj) {
+// function newClientLogIn(obj) {
 
-    // use template - cloneNode to get a document fragment
-    let template = document.getElementById("message").cloneNode(true);
-    // access content
-    let newMsg = template.content;
-    newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
-    chatThread.appendChild(newMsg);
-}
+//     // use template - cloneNode to get a document fragment
+//     let template = document.getElementById("message").cloneNode(true);
+//     // access content
+//     let newMsg = template.content;
+//     newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
+//     chatThread.appendChild(newMsg);
+// }
 
 function clientDisconnected(obj) {
 
+    if (!obj) {
+        return;
+    }
     // use template - cloneNode to get a document fragment
     let template = document.getElementById("message").cloneNode(true);
     // access content
@@ -348,15 +411,15 @@ const saveImgToUrl = () => {
 
 }
 
-function renderImgMsg(obj) {
+// function renderImgMsg(obj) {
 
-    console.log(obj.msg)
-    let imgTag = document.createElement("img");
-    imgTag.src = obj.msg;
+//     console.log(obj.msg)
+//     let imgTag = document.createElement("img");
+//     imgTag.src = obj.msg;
 
-    chatThread.appendChild(imgTag);
+//     chatThread.appendChild(imgTag);
 
-}
+// }
 
 let onlineClientsContainer = document.getElementById("onlineClients");
 

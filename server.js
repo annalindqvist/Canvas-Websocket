@@ -19,6 +19,7 @@ import {
 import {
     v4 as uuidv4
 } from "uuid";
+import { info } from "console";
 
 
 
@@ -74,6 +75,24 @@ server.on("upgrade", (req, socket, head) => {
 
 let connectedClients = [];
 let disconnectedClient;
+let isTypingArr = [];
+
+wss.isTyping = function (time) {
+
+    let timeNow = new Date();
+    console.log("timeNow", timeNow)
+
+    if (isTypingArr.length < 1) {
+        isTypingArr.push(time);
+        console.log("if", isTypingArr)
+    }
+    else {
+        isTypingArr.pop();
+        isTypingArr.push(time);
+        console.log("else", isTypingArr)
+    }
+}
+
 
 wss.uniqueId = function () {
     let id = uuidv4();
@@ -186,17 +205,21 @@ wss.on("connection", (ws) => {
                 //broadcastButExclude(wss, ws, objBroadcast);
                 break;
             }
-            // case "clientDisconnected": {
-            //     const id = ws.id;
+            case "someoneIsTyping": {
 
-            //     objBroadcast = {
-            //         type: "clientDisconnected",
-            //         nickname: obj.nickname,
-            //         id: id,
-            //     }
-            //     console.log("case clientDisconnected", objBroadcast)
-            //     broadcastButExclude(wss, ws, objBroadcast);
-            // }
+                console.log(obj.time)
+                wss.isTyping(obj.time)
+
+                objBroadcast = {
+                    type: "someoneIsTyping",
+                    nickname: obj.nickname,
+                    timeOfPress: isTypingArr,
+                };
+                console.log("case someoneIsTyping", objBroadcast)
+                broadcastButExclude(wss, ws, objBroadcast);
+
+                break;
+            }
             default:
                 break;
         }

@@ -102,3 +102,11 @@ img {
     background-color: cyan;
     justify-content: right;
 }
+#isTypingContainer {
+    position: relative;
+    background-color: darkkhaki;
+}
+
+#isTypingContainer p {
+    position: absolute;
+}
