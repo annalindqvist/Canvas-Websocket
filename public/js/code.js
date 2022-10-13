@@ -198,7 +198,7 @@ function renderMessage(obj, className) {
             newMsg.getElementById("msgNickname").innerText = obj.nickname;
             newMsg.getElementById("chatMsgContent").innerText = obj.msg;
             // class to style element to right or left in chat
-            newMsg.querySelector("li").className = className;
+            newMsg.getElementById("msgContainer").className = className;
             // visual: 10:41
             newMsg.getElementById("msgTime").innerText = currentTime();
             // render using prepend method - last message first
@@ -210,6 +210,7 @@ function renderMessage(obj, className) {
             let imgTemplate = document.getElementById("imgMessage").cloneNode(true);
             // access content
             let newImgMsg = imgTemplate.content;
+            newImgMsg.getElementById("imgMsgContainer").className = className;
             newImgMsg.getElementById("imgMsg").src = obj.msg;
             newImgMsg.getElementById("imgMsgNickname").innerText = obj.nickname;
             newImgMsg.getElementById("imgMsgTime").innerText = currentTime();
@@ -339,7 +340,9 @@ const saveImgToUrl = () => {
     };
     console.log("imgMsg", imgMsg)
     //renderImgMsg(imgMsg)
-    renderMessage(imgMsg)
+
+    let className = "alignRight";
+    renderMessage(imgMsg, className)
     // send to server
     websocket.send(JSON.stringify(imgMsg));
 
