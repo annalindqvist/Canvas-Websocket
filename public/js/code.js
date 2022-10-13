@@ -109,9 +109,14 @@ inputText.addEventListener("keypress", (e) => {
 
     // time of keypress
     let timestamp = new Date(e.timeStamp);
+    console.log("timestamp", timestamp);
+    // Får ut i consolen: timestamp Thu Jan 01 1970 01:00:03 GMT+0100 (centraleuropeisk normaltid)
+    
+    
+    
     //console.log("time", timestamp);
     //timestamp = timestamp.toTimeString().split(' ')[0];
-    console.log("timestamp", timestamp);
+   
 
     let objMessage = {
         type: "someoneIsTyping",
