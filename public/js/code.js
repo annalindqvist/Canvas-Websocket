@@ -35,23 +35,22 @@ websocket.addEventListener("message", (event) => {
     // use obj property 'type' to handle message event
     switch (obj.type) {
         case "text":
-            console.log("text körs")
+            //console.log("text körs")
             let className = "alignLeft";
             renderMessage(obj, className);
             break;
         case "url":
-            console.log("test url", obj)
+            //console.log("test url", obj)
             renderImgMsg(obj)
             break;
         case "newClient": {
-            console.log("new client", obj.nickname, obj.id)
             newClientLogIn(obj)
-            //onlineClients(obj);
+            //console.log("newClient test", obj)
+            onlineClients(obj.onlineClients);
         }
         case "disconnect": {
             //console.log(obj); 
-            //onlineClients(obj);
-            console.log(obj)
+            onlineClients(obj.onlineClients);
             clientDisconnected(obj.disconnectedClient)
             break;
         }
@@ -335,17 +334,17 @@ function renderImgMsg(obj) {
 let onlineClientsContainer = document.getElementById("onlineClients");
 
 function onlineClients(obj) {
-    console.log("connected clients are: ", obj)
-    console.log("test test")
-
     
-    if (obj.nickname) {
+    console.log("connected clients are: ", obj)
+
+    onlineClientsContainer.innerHTML = '';
+    obj.forEach(client => {
+
+        //console.log("client", client)
         const nameBubble = document.createElement("div");
-        nameBubble.id = obj.id;
-        nameBubble.innerText = obj.nickname;
-        // foreach nickname create div with nickname
+        nameBubble.innerText = client.nickname;
         
         onlineClientsContainer.appendChild(nameBubble)
-    }
+    });
 
 }

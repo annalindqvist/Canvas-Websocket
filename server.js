@@ -16,7 +16,9 @@ import {
     broadcast,
     broadcastButExclude
 } from "./libs/functions.js";
-import { v4 as uuidv4 } from "uuid";
+import {
+    v4 as uuidv4
+} from "uuid";
 
 
 
@@ -102,14 +104,23 @@ wss.on("connection", (ws) => {
             wss.clients.size
         );
 
-        disconnectedClient = connectedClients.filter(c => c.id === ws.id);
-        let remaningClients = connectedClients.filter(c => c.id !== ws.id)
-        console.log("disconnectedCLients", remaningClients)
-            console.log("disconnected clients", disconnectedClient)
+        disconnectedClient = connectedClients.find(c => c.id === ws.id);
+        let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
+        connectedClients.splice(indexOfDisconnectedClient, 1);
+
+        //let remaningClients = connectedClients.filter(c => c.id !== ws.id)
+            //console.log("disconnectedClient", disconnectedClient);
+            //console.log("connectedClients", connectedClients)
+        // console.log("disconnectedCLients", remaningClients)
+        // console.log("disconnected clients", disconnectedClient)
 
         wss.clients.forEach(client => {
 
-           client.send(JSON.stringify({type: 'disconnect', onlineClients: remaningClients, disconnectedClient: disconnectedClient[0]}))
+            client.send(JSON.stringify({
+                type: 'disconnect',
+                onlineClients: connectedClients,
+                disconnectedClient: disconnectedClient,
+            }))
         });
 
         // console.log("test connectedclients", connectedClients)
@@ -151,16 +162,29 @@ wss.on("connection", (ws) => {
             case "newClient": {
                 const id = ws.id;
 
+                let newObj = {
+                    nickname: obj.nickname,
+                    id: id,
+                }
+                connectedClients.push(newObj);
+
                 objBroadcast = {
                     type: "newClient",
                     nickname: obj.nickname,
                     id: id,
+                    onlineClients: connectedClients,
                 };
 
-                connectedClients.push(objBroadcast);
+                console.log("rad 173 connectedclients", connectedClients)
+                //console.log("case newClient", objBroadcast)
 
-                console.log("case newClient", objBroadcast)
-                broadcastButExclude(wss, ws, objBroadcast);
+                wss.clients.forEach((client) => {
+                    
+                        client.send(JSON.stringify(objBroadcast));
+                    
+                });
+                //broadcastButExclude(wss, ws, objBroadcast);
+                break;
             }
             // case "clientDisconnected": {
             //     const id = ws.id;
