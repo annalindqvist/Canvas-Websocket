@@ -1,12 +1,24 @@
+// imports
+
+import {
+    createPopup
+} from 'https://unpkg.com/@picmo/popup-picker@latest/dist/index.js?module';
+// import { createPicker } from "../../node_modules/picmo";
+// import { TwemojiRenderer } from "../../node_modules/@picmo/renderer-twemoji";
+
+//import{ createPicker } from 'https://unpkg.com/picmo@latest/dist/index.js';
+
+
 // DOM elements
 const inputText = document.getElementById("inputText");
 const setNickname = document.querySelector("#setNickname");
 const chatThread = document.getElementById("chatThread");
 const chat = document.getElementById("chat");
 const canvas = document.getElementById("canvas");
-// Send btn in input msg....s
+let onlineClientsContainer = document.getElementById("onlineClients");
 const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
+
 const isTypingContainer = document.getElementById("isTypingContainer");
 
 // variable current user | nickname
@@ -16,8 +28,8 @@ let nickname;
 const websocket = new WebSocket("ws://localhost:80");
 
 
-/* event listeners
-------------------------------- */
+// --- EVENT LISTENERS ---
+
 
 // listen on close event (server)
 websocket.addEventListener("close", (event) => {
@@ -27,43 +39,30 @@ websocket.addEventListener("close", (event) => {
 
 // listen to messages from client | server
 websocket.addEventListener("message", (event) => {
-    // console.log(event.data);
 
-    console.log("Event", event)
     let obj = parseJSON(event.data);
-    console.log("objjj", obj)
     let className = "alignLeft";
-    // todo
-    // use obj property 'type' to handle message event
+  
     switch (obj.type) {
         case "text":
-            //console.log("text körs")
-
             renderMessage(obj, className);
             isTypingContainer.innerHTML = "";
             break;
         case "url":
-            //console.log("test url", obj)
-
             renderMessage(obj, className);
             isTypingContainer.innerHTML = "";
-            //renderImgMsg(obj)
             break;
         case "newClient": {
-            // newClientLogIn(obj)
             renderMessage(obj)
-            //console.log("newClient test", obj)
             onlineClients(obj.onlineClients);
         }
         case "disconnect": {
-            //console.log(obj); 
             onlineClients(obj.onlineClients);
             clientDisconnected(obj.disconnectedClient)
             break;
         }
         case "someoneIsTyping": {
             someoneIsTyping(obj)
-            console.log("someoneistyping msg", obj)
         }
         default:
             break;
@@ -71,8 +70,9 @@ websocket.addEventListener("message", (event) => {
 
 });
 
+
+// --- Set nickname and send to server ---
 setNickname.addEventListener("click", () => {
-    // get value from input nickname
     nickname = document.getElementById("nickname").value;
 
     let objMessage = {
@@ -87,33 +87,27 @@ setNickname.addEventListener("click", () => {
     const logInContainer = document.getElementById("logIn");
     logInContainer.style.display = 'none';
     chat.style.display = 'block';
-
 });
 
+// --- Listen on input.value to send msg to chat ---
+// --- 1. Press enter to send
 inputText.addEventListener("keydown", (e) => {
 
     if (e.key === "Enter" && inputText.value.length > 0) {
-
         handleMessage();
     }
 });
+// --- 2. Press on btn to send
+sendBtn.addEventListener("click", (e) => {
 
+    if (e.target == sendBtn && inputText.value.length > 0) {
+        handleMessage();
+    }
+});
+// --- Listen on keypress and send timestamp to server for visual feedback
 inputText.addEventListener("keypress", (e) => {
-    //console.log(e)
-
-    // time of keypress
-    // let timestamp = new Date(e.timeStamp);
-    // console.log("timestamp", timestamp);
-    // Får ut i consolen: timestamp Thu Jan 01 1970 01:00:03 GMT+0100 (centraleuropeisk normaltid)
-    
+   
     let timestamp = new Date().getTime();
-    //console.log("timestamp", timestamp)
-
-    // let timeNow = new Date().getTime();
-    // let timeNowSpan = timeNow + 5000;
-    // console.log("timeNowSpan", timeNowSpan)
-    // console.log(timeNow + 5000);
-
     let objMessage = {
         type: "someoneIsTyping",
         nickname: nickname,
@@ -123,37 +117,22 @@ inputText.addEventListener("keypress", (e) => {
     websocket.send(JSON.stringify(objMessage));
 })
 
+//const chatFeedback = document.getElementsByClassName("chat-bubble")
 
-sendBtn.addEventListener("click", (e) => {
-
-    if (e.target == sendBtn && inputText.value.length > 0) {
-
-        handleMessage();
-        isTypingContainer.innerHTML = "";
-    }
-});
-
+// --- Visual feedback if someone is typing ---
 function someoneIsTyping(obj) {
-    console.log("test someoneistyping", obj)
-
+    
     if (obj.msg === false) {
-        console.log("not typing")
         isTypingContainer.innerHTML = "";
+        //chatFeedback.style.display = 'none';
+
     } else if (obj.msg === true) {
-        console.log("someone is typing")
         isTypingContainer.innerHTML = "";
         let whoIsTyping = document.createElement("p");
         whoIsTyping.innerText = "somone is typing...";
         isTypingContainer.appendChild(whoIsTyping);
+        //chatFeedback.style.display = 'inline-block';
     }
-
-    // let objMessage = {
-    //     type: "someoneIsTyping",
-    //     msg: info,
-    //     nickname: nickname,
-    // };
-
-    // websocket.send(JSON.stringify(objMessage));
 }
 
 function handleMessage() {
@@ -246,7 +225,6 @@ function renderMessage(obj, className) {
 
     switch (obj.type) {
 
-
         case "text":
             // use template - cloneNode to get a document fragment
             let template = document.getElementById("message").cloneNode(true);
@@ -273,7 +251,6 @@ function renderMessage(obj, className) {
             newImgMsg.getElementById("imgMsgNickname").innerText = obj.nickname;
             newImgMsg.getElementById("imgMsgTime").innerText = currentTime();
             chatThread.appendChild(newImgMsg);
-
 
             break;
         case "newClient": {
@@ -411,30 +388,36 @@ const saveImgToUrl = () => {
 
 }
 
-// function renderImgMsg(obj) {
-
-//     console.log(obj.msg)
-//     let imgTag = document.createElement("img");
-//     imgTag.src = obj.msg;
-
-//     chatThread.appendChild(imgTag);
-
-// }
-
-let onlineClientsContainer = document.getElementById("onlineClients");
-
 function onlineClients(obj) {
-
-    console.log("connected clients are: ", obj)
 
     onlineClientsContainer.innerHTML = '';
     obj.forEach(client => {
 
-        //console.log("client", client)
         const nameBubble = document.createElement("div");
         nameBubble.innerText = client.nickname;
 
         onlineClientsContainer.appendChild(nameBubble)
     });
-
 }
+
+// --- EMOJI PICKER ---
+// https://github.com/joeattardi/picmo
+
+document.addEventListener('DOMContentLoaded', () => {
+    const trigger = document.querySelector('#trigger');
+
+    const picker = createPopup({}, {
+        referenceElement: trigger,
+        triggerElement: trigger,
+        position: 'right-end'
+    });
+
+    trigger.addEventListener('click', () => {
+        picker.toggle();
+    });
+
+    picker.addEventListener('emoji:select', (selection) => {
+        inputText.value += selection.emoji;
+    });
+
+});

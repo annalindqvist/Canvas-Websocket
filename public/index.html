@@ -26,11 +26,31 @@
 
         <canvas id="canvas" display="none"></canvas>
 
-        <div id="isTypingContainer"></div>
+        <div id="isTypingContainer">
+            <div class="chat-bubble">
+                <div class="typing">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
         <!-- input chat -->
         <div id="chatInput">
-            <button id="drawBtn">Draw</button>
-            <input type="text" id="inputText" placeholder="Ps. only nice messages goes here">
+            
+            <div id="chatInputField">
+                <input type="text" id="inputText" placeholder="Ps. only nice messages goes here">
+                <div id="trigger">😎</div>
+                <div id="drawBtn">🖌️</div>
+            </div>
+           
+
+            <section id="selection-outer" class="empty">
+                <div id="selection">
+                    <div id="selection-emoji" class="empty"></div>
+                </div>
+            </section>
+           
             <button id="sendMsgBtn">Send</button>
         </div>
 
@@ -59,13 +79,15 @@
             <div id="chatImgMsgContainer">
                 <img id="imgMsg" src="">
             </div>
-           
+
             <p id="imgMsgTime"></p>
         </li>
 
     </template>
 
-    <script src="js/code.js"></script>
+    <script src="https://unpkg.com/@picmo/popup-picker@latest/dist/umd/index.js"></script>
+
+    <script type="module" src="js/code.js"></script>
 
 </body>
 

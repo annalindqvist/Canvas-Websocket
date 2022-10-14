@@ -31,7 +31,6 @@ import {
 const port = 80;
 
 
-
 /* express
 ------------------------------- */
 // express 'app' environment
@@ -39,7 +38,6 @@ const app = express();
 
 // serve static files - every file in folder named 'public'
 app.use(express.static("public"));
-
 
 
 /* server(s)
@@ -77,7 +75,6 @@ server.on("upgrade", (req, socket, head) => {
 
 let connectedClients = [];
 let disconnectedClient;
-let isTypingArr = [];
 let isTyping = false;
 
 wss.timeNow = function (isTyping, timestamp, ws) {
@@ -157,12 +154,6 @@ wss.on("connection", (ws) => {
         let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
         connectedClients.splice(indexOfDisconnectedClient, 1);
 
-        //let remaningClients = connectedClients.filter(c => c.id !== ws.id)
-        //console.log("disconnectedClient", disconnectedClient);
-        //console.log("connectedClients", connectedClients)
-        // console.log("disconnectedCLients", remaningClients)
-        // console.log("disconnected clients", disconnectedClient)
-
         wss.clients.forEach(client => {
 
             client.send(JSON.stringify({
@@ -172,7 +163,6 @@ wss.on("connection", (ws) => {
             }))
         });
 
-        // console.log("test connectedclients", connectedClients)
     });
 
     // message event

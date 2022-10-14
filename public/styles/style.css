@@ -36,8 +36,8 @@
     border: 1px solid red;
     display: flex;
     align-items: center;
-    
-    
+
+
     position: relative;
 
 
@@ -50,9 +50,11 @@
     border-radius: 2rem;
 
 }
-#chaImgMsgContainer{
+
+#chaImgMsgContainer {
     background-color: darkgray;
 }
+
 #msgTime {
     font-size: 12px;
 }
@@ -68,17 +70,42 @@
     bottom: 0;
 }
 
+#chatInputField {
+    position: relative;
+}
+
 #chatInput #inputText {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 3rem 0.5rem 1.5rem;
     width: 70vw;
     border: 2px solid blueviolet;
     border-radius: 2rem;
     margin: 1rem;
 }
 
+#chatInput #drawBtn, #chatInput #trigger {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    bottom: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+#chatInput #trigger {
+    right: 2.5rem;
+}
+#chatInput #drawBtn {
+    right: 1.5rem;
+}
+
 #canvas {
 
-    
+
     /* border: 2px solid green; */
     display: none;
     position: absolute;
@@ -102,6 +129,7 @@ img {
     background-color: cyan;
     justify-content: right;
 }
+
 #isTypingContainer {
     position: relative;
     background-color: darkkhaki;
@@ -110,3 +138,65 @@ img {
 #isTypingContainer p {
     position: absolute;
 }
+
+.chat-bubble {
+    background-color: #E6F8F1;
+    padding: 16px 28px;
+    -webkit-border-radius: 20px;
+    -webkit-border-bottom-left-radius: 2px;
+    -moz-border-radius: 20px;
+    -moz-border-radius-bottomleft: 2px;
+    border-radius: 20px;
+    border-bottom-left-radius: 2px;
+    display: none;
+}
+
+.typing {
+    align-items: center;
+    display: flex;
+    height: 17px;
+}
+
+.typing .dot {
+    animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
+    background-color: #6CAD96;
+    border-radius: 50%;
+    height: 7px;
+    margin-right: 4px;
+    vertical-align: middle;
+    width: 7px;
+    display: inline-block;
+}
+
+.typing .dot:nth-child(1) {
+    animation-delay: 200ms;
+}
+
+.typing .dot:nth-child(2) {
+    animation-delay: 300ms;
+}
+
+.typing .dot:nth-child(3) {
+    animation-delay: 400ms;
+}
+
+.typing .dot:last-child {
+    margin-right: 0;
+}
+
+@keyframes mercuryTypingAnimation {
+    0% {
+        transform: translateY(0px);
+        background-color: #6CAD96; 
+    }
+
+    28% {
+        transform: translateY(-7px);
+        background-color: #9ECAB9; 
+    }
+
+    44% {
+        transform: translateY(0px);
+        background-color: #B5D9CB; 
+    
+}}
