@@ -80,7 +80,7 @@ let disconnectedClient;
 let isTypingArr = [];
 let isTyping = false;
 
-wss.timeNow = function (isTyping, timestamp) {
+wss.timeNow = function (isTyping, timestamp, ws) {
 
     let timeNowSpan;
 
@@ -93,61 +93,41 @@ wss.timeNow = function (isTyping, timestamp) {
             console.log("86. stop writing")
             isTyping = false;
             
-        }
+        };
         console.log("varför måste denna finnas?!??!!?", isTyping);
-        wss.clients.forEach(client => {
 
-            client.send(JSON.stringify({
-                type: "someoneIsTyping",
-                msg: isTyping,
-            }))
-        });
-        
-    }
-
-}
-
-wss.isTyping = function (time) {
-
-    //let timeNow = new Date();
-    //console.log("timeNow", timeNow)
-
-    let timestamp = time;
-
-    // if (isTypingArr.length < 1) {
-        // isTypingArr.push(time);
-        // console.log("if", isTypingArr)
-        isTyping = true;
-        wss.timeNow(isTyping, timestamp);
-        //  wss.timeNow(isTyping, isTypingArr);
+        let objBroadcast = {
+            type: "someoneIsTyping",
+            msg: isTyping,
+        };
+        //console.log("case text", objBroadcast)
+        // broadcast to all but this ws...
+        broadcastButExclude(wss, ws, objBroadcast);
         // wss.clients.forEach(client => {
 
         //     client.send(JSON.stringify({
         //         type: "someoneIsTyping",
         //         msg: isTyping,
-        //     }))
+        //     }));
         // });
-    // } else {
-    //     isTypingArr.pop();
-    //     isTypingArr.push(time);
-    //     console.log("else", isTypingArr)
-    //     isTyping = true;
-    //     wss.timeNow(isTyping, isTypingArr);
-    //     // wss.clients.forEach(client => {
+        
+    };
 
-    //     //     client.send(JSON.stringify({
-    //     //         type: "someoneIsTyping",
-    //     //         msg: isTyping,
-    //     //     }))
-    //     // });
-    }
+};
 
+wss.isTyping = function (time, ws) {
+
+    let timestamp = time;
+
+    isTyping = true;
+    wss.timeNow(isTyping, timestamp, ws);
+};
 
 
 wss.uniqueId = function () {
     let id = uuidv4();
     return id;
-}
+};
 
 /* listen on new websocket connections
 ------------------------------- */
@@ -258,7 +238,7 @@ wss.on("connection", (ws) => {
             case "someoneIsTyping": {
 
                 console.log(obj.time)
-                wss.isTyping(obj.time)
+                wss.isTyping(obj.time, ws)
 
                 // let objBroadcast = {
                 //     type: "someoneIsTyping",
