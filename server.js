@@ -19,7 +19,9 @@ import {
 import {
     v4 as uuidv4
 } from "uuid";
-import { info } from "console";
+import {
+    info
+} from "console";
 
 
 
@@ -76,22 +78,70 @@ server.on("upgrade", (req, socket, head) => {
 let connectedClients = [];
 let disconnectedClient;
 let isTypingArr = [];
+let isTyping = false;
+
+wss.timeNow = function (isTyping, timestamp) {
+
+    let timeNowSpan;
+
+    while (isTyping === true) {
+        // console.log("typing.....")
+        let timeNow = new Date().getTime();
+        // timeNowSpan = timeOfPress[0] + 5000;
+        timeNowSpan = timestamp + 10000;
+        if (timeNowSpan < timeNow) {
+            console.log("86. stop writing")
+            isTyping = false;
+            
+        }
+        console.log("varför måste denna finnas?!??!!?", isTyping);
+        wss.clients.forEach(client => {
+
+            client.send(JSON.stringify({
+                type: "someoneIsTyping",
+                msg: isTyping,
+            }))
+        });
+        
+    }
+
+}
 
 wss.isTyping = function (time) {
 
-    let timeNow = new Date();
-    console.log("timeNow", timeNow)
+    //let timeNow = new Date();
+    //console.log("timeNow", timeNow)
 
-    if (isTypingArr.length < 1) {
-        isTypingArr.push(time);
-        console.log("if", isTypingArr)
+    let timestamp = time;
+
+    // if (isTypingArr.length < 1) {
+        // isTypingArr.push(time);
+        // console.log("if", isTypingArr)
+        isTyping = true;
+        wss.timeNow(isTyping, timestamp);
+        //  wss.timeNow(isTyping, isTypingArr);
+        // wss.clients.forEach(client => {
+
+        //     client.send(JSON.stringify({
+        //         type: "someoneIsTyping",
+        //         msg: isTyping,
+        //     }))
+        // });
+    // } else {
+    //     isTypingArr.pop();
+    //     isTypingArr.push(time);
+    //     console.log("else", isTypingArr)
+    //     isTyping = true;
+    //     wss.timeNow(isTyping, isTypingArr);
+    //     // wss.clients.forEach(client => {
+
+    //     //     client.send(JSON.stringify({
+    //     //         type: "someoneIsTyping",
+    //     //         msg: isTyping,
+    //     //     }))
+    //     // });
     }
-    else {
-        isTypingArr.pop();
-        isTypingArr.push(time);
-        console.log("else", isTypingArr)
-    }
-}
+
 
 
 wss.uniqueId = function () {
@@ -128,8 +178,8 @@ wss.on("connection", (ws) => {
         connectedClients.splice(indexOfDisconnectedClient, 1);
 
         //let remaningClients = connectedClients.filter(c => c.id !== ws.id)
-            //console.log("disconnectedClient", disconnectedClient);
-            //console.log("connectedClients", connectedClients)
+        //console.log("disconnectedClient", disconnectedClient);
+        //console.log("connectedClients", connectedClients)
         // console.log("disconnectedCLients", remaningClients)
         // console.log("disconnected clients", disconnectedClient)
 
@@ -198,9 +248,9 @@ wss.on("connection", (ws) => {
                 //console.log("case newClient", objBroadcast)
 
                 wss.clients.forEach((client) => {
-                    
-                        client.send(JSON.stringify(objBroadcast));
-                    
+
+                    client.send(JSON.stringify(objBroadcast));
+
                 });
                 //broadcastButExclude(wss, ws, objBroadcast);
                 break;
@@ -210,16 +260,30 @@ wss.on("connection", (ws) => {
                 console.log(obj.time)
                 wss.isTyping(obj.time)
 
-                objBroadcast = {
-                    type: "someoneIsTyping",
-                    nickname: obj.nickname,
-                    timeOfPress: isTypingArr,
-                };
-                console.log("case someoneIsTyping", objBroadcast)
-                broadcastButExclude(wss, ws, objBroadcast);
+                // let objBroadcast = {
+                //     type: "someoneIsTyping",
+                //     nickname: obj.nickname,
+                //     msg: isTyping,
+                // };
+                // console.log("case someoneIsTyping", objBroadcast)
+                // broadcastButExclude(wss, ws, objBroadcast);
 
                 break;
             }
+            // case "stoppedTyping": {
+
+            //     //console.log(obj.time)
+            //     //wss.isTyping(obj.time)
+
+            //     let objBroadcast = {
+            //         type: "stoppedTyping",
+            //         msg: isTyping,
+            //     };
+            //     console.log("case stoppedTyping", objBroadcast)
+            //     broadcastButExclude(wss, ws, objBroadcast);
+
+            //     break;
+            // }
             default:
                 break;
         }

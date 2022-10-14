@@ -7,6 +7,7 @@ const canvas = document.getElementById("canvas");
 // Send btn in input msg....s
 const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
+const isTypingContainer = document.getElementById("isTypingContainer");
 
 // variable current user | nickname
 let nickname;
@@ -61,8 +62,8 @@ websocket.addEventListener("message", (event) => {
             break;
         }
         case "someoneIsTyping": {
-            renderSomeoneIsTyping(obj)
-            console.log("someoneistyping arr", obj.timeOfPress)
+            someoneIsTyping(obj)
+            console.log("someoneistyping msg", obj)
         }
         default:
             break;
@@ -91,13 +92,6 @@ setNickname.addEventListener("click", () => {
 
 inputText.addEventListener("keydown", (e) => {
 
-    // if (inputText.value.length > 0) {
-    //     someoneIsTyping("start");
-    // }
-    // if (inputText.value.length < 0) {
-    //     someoneIsTyping("stop");
-    // }
-    // press Enter & make sure at least one char to send handleMessage function
     if (e.key === "Enter" && inputText.value.length > 0) {
 
         handleMessage();
@@ -105,18 +99,20 @@ inputText.addEventListener("keydown", (e) => {
 });
 
 inputText.addEventListener("keypress", (e) => {
-    console.log(e)
+    //console.log(e)
 
     // time of keypress
-    let timestamp = new Date(e.timeStamp);
-    console.log("timestamp", timestamp);
+    // let timestamp = new Date(e.timeStamp);
+    // console.log("timestamp", timestamp);
     // Får ut i consolen: timestamp Thu Jan 01 1970 01:00:03 GMT+0100 (centraleuropeisk normaltid)
     
-    
-    
-    //console.log("time", timestamp);
-    //timestamp = timestamp.toTimeString().split(' ')[0];
-   
+    let timestamp = new Date().getTime();
+    //console.log("timestamp", timestamp)
+
+    // let timeNow = new Date().getTime();
+    // let timeNowSpan = timeNow + 5000;
+    // console.log("timeNowSpan", timeNowSpan)
+    // console.log(timeNow + 5000);
 
     let objMessage = {
         type: "someoneIsTyping",
@@ -127,6 +123,7 @@ inputText.addEventListener("keypress", (e) => {
     websocket.send(JSON.stringify(objMessage));
 })
 
+
 sendBtn.addEventListener("click", (e) => {
 
     if (e.target == sendBtn && inputText.value.length > 0) {
@@ -136,19 +133,28 @@ sendBtn.addEventListener("click", (e) => {
     }
 });
 
-// function someoneIsTyping(info) {
-//     console.log("test someoneistyping")
+function someoneIsTyping(obj) {
+    console.log("test someoneistyping", obj)
 
-//     //console.log("info", info)
+    if (obj.msg === false) {
+        console.log("not typing")
+        isTypingContainer.innerHTML = "";
+    } else if (obj.msg === true) {
+        console.log("someone is typing")
+        isTypingContainer.innerHTML = "";
+        let whoIsTyping = document.createElement("p");
+        whoIsTyping.innerText = "somone is typing...";
+        isTypingContainer.appendChild(whoIsTyping);
+    }
 
-//     let objMessage = {
-//         type: "someoneIsTyping",
-//         msg: info,
-//         nickname: nickname,
-//     };
+    // let objMessage = {
+    //     type: "someoneIsTyping",
+    //     msg: info,
+    //     nickname: nickname,
+    // };
 
-//     websocket.send(JSON.stringify(objMessage));
-// }
+    // websocket.send(JSON.stringify(objMessage));
+}
 
 function handleMessage() {
 
@@ -206,20 +212,9 @@ function parseJSON(data) {
     }
 }
 
-const isTypingContainer = document.getElementById("isTypingContainer");
 
-function renderSomeoneIsTyping(obj) {
 
-    // if (obj.msg === "stop") {
-    //     isTypingContainer.innerHTML = "";
-    // } else if (obj.msg === "start") {
-        isTypingContainer.innerHTML = "";
-        let whoIsTyping = document.createElement("p");
-        whoIsTyping.innerText = obj.nickname + " " + "is typing..";
-        isTypingContainer.appendChild(whoIsTyping);
-    // }
 
-}
 
 /**
  * render new message
