@@ -20,9 +20,9 @@
 #chat {
     border: 3px solid blue;
     max-width: 100%;
-    height: 90vh;
+    height: 100vh;
     position: relative;
-    margin: 1rem;
+    
     background-color: cadetblue;
 
     display: none;
@@ -30,6 +30,9 @@
 
 #chatThread {
     list-style: none;
+    height: 80vh;
+    margin: 2rem;
+    overflow-y: scroll;
 }
 
 #chatThread li {
