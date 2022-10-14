@@ -5,6 +5,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
+    color: #1c1c1c;
 }
 
 #logIn {
@@ -18,16 +19,26 @@
 }
 
 #chat {
-    border: 3px solid blue;
+    /* border: 3px solid blue; */
     max-width: 100%;
     height: 100vh;
     position: relative;
-    
-    background-color: cadetblue;
+    padding: 1rem;
+    background-color: rgb(246, 239, 255);
 
     display: none;
 }
 
+#onlineClients {
+    display: flex;
+}
+#onlineClients div {
+    max-width: fit-content;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    border: 1px solid rebeccapurple;
+    margin: 0.5rem;
+}
 #chatThread {
     list-style: none;
     height: 80vh;
@@ -36,36 +47,25 @@
 }
 
 #chatThread li {
-    border: 1px solid red;
     display: flex;
     align-items: center;
-
-
     position: relative;
-
-
     margin: 1rem;
 }
 
-#chatMsgContainer {
-    border: 1px solid pink;
+#chatMsgContainer, #chatImgMsgContainer {
     padding: 0.5rem 1rem;
-    border-radius: 2rem;
-
 }
 
-#chaImgMsgContainer {
-    background-color: darkgray;
-}
-
-#msgTime {
+#msgTime, #imgMsgTime {
     font-size: 12px;
 }
 
-#msgNickname {
+#msgNickname, #imgMsgNickname {
     font-size: 12px;
     position: absolute;
-    bottom: 0;
+    top: 0;
+    font-weight: medium;
 }
 
 #chatInput {
@@ -107,15 +107,9 @@
 }
 
 #canvas {
-
-
-    /* border: 2px solid green; */
     display: none;
     position: absolute;
     top: 0;
-    /* left: 1rem;
-    bottom: 1rem;
-    right: 1rem; */
 }
 
 img {
@@ -124,13 +118,22 @@ img {
 }
 
 .alignLeft {
-    background-color: crimson;
     justify-content: left;
+}
+#chatThread .alignLeft #chatMsgContainer{
+    margin-right: 1rem;
+    background-color: rgb(194, 140, 255);
+    border-radius: 0 1rem 1rem 1rem;
 }
 
 .alignRight {
-    background-color: cyan;
     justify-content: right;
+    
+}
+#chatThread .alignRight #chatMsgContainer{
+    margin-left: 1rem;
+    background-color: rgb(223, 196, 255);
+    border-radius: 1rem 0 1rem 1rem;
 }
 
 #isTypingContainer {
