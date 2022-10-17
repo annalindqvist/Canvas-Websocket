@@ -162,45 +162,71 @@ img {
 
 #canvasTools {
     display: none;
-    
+
 }
+
 #canvasTools div {
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
     margin: 0.5rem;
 }
-#blue{
+
+#blue {
     background-color: blue;
 }
-#yellow{
+
+#yellow {
     background-color: yellow;
 }
-#red{
+
+#red {
     background-color: red;
 }
-#green{
+
+#green {
     background-color: green;
 }
-#black{
+
+#black {
     background-color: black;
 }
-#white{
+
+#white {
     background-color: white;
 }
-#orange{
+
+#orange {
     background-color: orange;
 }
-#purple{
+
+#purple {
     background-color: purple;
 }
-#brown{
+
+#brown {
     background-color: brown;
 }
+
 #pink {
     background-color: pink;
 }
 
+#serverDown {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(223, 196, 255);
+}
+#serverDownGif {
+    background-image: url(../images/serverdown.gif);
+    width: 420px;
+    height: 300px;
+    margin: 3rem;
+}
 
 /* .chat-bubble {
     background-color: #E6F8F1;

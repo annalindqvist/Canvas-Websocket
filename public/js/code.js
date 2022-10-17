@@ -20,7 +20,7 @@ let onlineClientsContainer = document.getElementById("onlineClients");
 const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
 const canvasTools = document.getElementById("canvasTools");
-
+const logInContainer = document.getElementById("logIn");
 const chatfeedback = document.getElementById("chatfeedback");
 
 // --- variables 
@@ -31,7 +31,7 @@ let colorOfPencil = black;
 
 // use WebSocket >>> make sure server uses same ws port!
 const baseURL = window.location.href.split("//")[1];
-const protocol = 'wss';
+const protocol = 'ws';
 const websocket = new WebSocket(`${protocol}://${baseURL}`);
 //const websocket = new WebSocket("ws://localhost:80");
 
@@ -41,8 +41,11 @@ const websocket = new WebSocket(`${protocol}://${baseURL}`);
 
 // listen on close event (server)
 websocket.addEventListener("close", (e) => {
-    // console.log('Server down...', event);
-    document.getElementById("status").textContent = "Sry....server down";
+    // gif doesnt show? why?
+    document.getElementById("serverDown").style.display = 'flex';
+    chat.style.display = 'none';
+    logInContainer.style.display = 'none';
+
 });
 
 websocket.addEventListener("open", (e) => {
@@ -98,7 +101,6 @@ setNickname.addEventListener("click", () => {
     websocket.send(JSON.stringify(objMessage));
 
     // hide login container and show chat
-    const logInContainer = document.getElementById("logIn");
     logInContainer.style.display = 'none';
     chat.style.display = 'block';
 });
