@@ -3,6 +3,7 @@
 import {
     createPopup
 } from 'https://unpkg.com/@picmo/popup-picker@latest/dist/index.js?module';
+// import { caseInsensitiveIncludes } from 'picmo';
 // import { createPicker } from "../../node_modules/picmo";
 // import { TwemojiRenderer } from "../../node_modules/@picmo/renderer-twemoji";
 
@@ -19,10 +20,12 @@ let onlineClientsContainer = document.getElementById("onlineClients");
 const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
 
-const isTypingContainer = document.getElementById("isTypingContainer");
+const chatfeedback = document.getElementById("chatfeedback");
 
 // variable current user | nickname
 let nickname;
+let isTyping = false;
+let lastKeyPress;
 
 // use WebSocket >>> make sure server uses same ws port!
 const websocket = new WebSocket("ws://localhost:80");
@@ -32,15 +35,21 @@ const websocket = new WebSocket("ws://localhost:80");
 
 
 // listen on close event (server)
-websocket.addEventListener("close", (event) => {
+websocket.addEventListener("close", (e) => {
     // console.log('Server down...', event);
     document.getElementById("status").textContent = "Sry....server down";
 });
 
-// listen to messages from client | server
-websocket.addEventListener("message", (event) => {
+websocket.addEventListener("open", (e) => {
+    console.log("websocket open")
+    setInterval(checkIsTyping, 2000);
 
-    let obj = parseJSON(event.data);
+});
+
+// listen to messages from client | server
+websocket.addEventListener("message", (e) => {
+
+    let obj = parseJSON(e.data);
     let className = "alignLeft";
   
     switch (obj.type) {
@@ -93,10 +102,14 @@ setNickname.addEventListener("click", () => {
 // --- 1. Press enter to send
 inputText.addEventListener("keydown", (e) => {
 
+   lastKeyPress = new Date().getTime();
+
     if (e.key === "Enter" && inputText.value.length > 0) {
         handleMessage();
     }
+
 });
+
 // --- 2. Press on btn to send
 sendBtn.addEventListener("click", (e) => {
 
@@ -119,18 +132,57 @@ inputText.addEventListener("keypress", (e) => {
 
 //const chatFeedback = document.getElementsByClassName("chat-bubble")
 
+// --- Check if someone is typing 
+function checkIsTyping () {
+
+    let timeNow = new Date().getTime();
+    let timeDifferense;
+    //console.log("checkIsTyping", isTyping)
+    if (lastKeyPress) {
+
+        timeDifferense = lastKeyPress + 5000;
+
+        // 5sek + 2sek from setinterval in websocket open 
+        if (timeNow < timeDifferense) {
+            console.log("timedifferense less than 20sek", timeDifferense)
+            isTyping = true;
+
+        }
+        else if (timeNow > timeDifferense) {
+            console.log("timedifferense bigger than 20sek", timeDifferense) 
+            lastKeyPress = "";
+            isTyping = false;
+            
+        }
+        sendTypingToServer();
+
+    }
+}
+
+function sendTypingToServer () {
+    let objMessage = {
+        type: "someoneIsTyping",
+        msg: isTyping,
+        nickname: nickname,
+    };
+
+    // send to server
+    websocket.send(JSON.stringify(objMessage));
+}
+
 // --- Visual feedback if someone is typing ---
 function someoneIsTyping(obj) {
     
+    console.log("test frontend someoneistyping", obj)
     if (obj.msg === false) {
-        isTypingContainer.innerHTML = "";
+        chatfeedback.innerHTML = "";
         //chatFeedback.style.display = 'none';
 
     } else if (obj.msg === true) {
-        isTypingContainer.innerHTML = "";
+        chatfeedback.innerHTML = "";
         let whoIsTyping = document.createElement("p");
-        whoIsTyping.innerText = "somone is typing...";
-        isTypingContainer.appendChild(whoIsTyping);
+        whoIsTyping.innerText = obj.nickname + " is typing...";
+        chatfeedback.appendChild(whoIsTyping);
         //chatFeedback.style.display = 'inline-block';
     }
 }
@@ -159,11 +211,10 @@ function handleMessage() {
 
 /* functions...
 ------------------------------- */
-
+// Returns current time like "12:15"
 function currentTime() {
 
     let dayTime = new Date();
-    // time right now with output: 12:00
     let time = dayTime.toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit'
@@ -171,12 +222,7 @@ function currentTime() {
     return time;
 }
 
-/**
- * parse JSON
- *
- * @param {*} data
- * @return {obj}
- */
+// -- KOLLA PÅ DENNA! catch error??
 function parseJSON(data) {
     // try to parse json
     try {
@@ -192,15 +238,8 @@ function parseJSON(data) {
 }
 
 
-
-
-
-/**
- * render new message
- *
- * @param {obj}
- */
-
+// --- Render messenge to client
+// obj.type to see if there is an textMessage, url(img)Message or someone logged in
 
 function renderMessage(obj, className) {
     // // use template - cloneNode to get a document fragment

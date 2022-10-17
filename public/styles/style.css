@@ -136,16 +136,19 @@ img {
     border-radius: 1rem 0 1rem 1rem;
 }
 
-#isTypingContainer {
-    position: relative;
+#chatfeedback {
+   
     background-color: darkkhaki;
+    margin: 1rem;
 }
 
-#isTypingContainer p {
-    position: absolute;
+#chatfeedback p {
+   
+   background-color: green;
+    
 }
 
-.chat-bubble {
+/* .chat-bubble {
     background-color: #E6F8F1;
     padding: 16px 28px;
     -webkit-border-radius: 20px;
@@ -205,4 +208,4 @@ img {
         transform: translateY(0px);
         background-color: #B5D9CB; 
     
-}}
+}} */

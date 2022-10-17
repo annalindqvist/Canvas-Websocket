@@ -75,50 +75,50 @@ server.on("upgrade", (req, socket, head) => {
 
 let connectedClients = [];
 let disconnectedClient;
-let isTyping = false;
+// let isTyping = false;
 
-wss.timeNow = function (isTyping, timestamp, ws) {
+// wss.timeNow = function (isTyping, timestamp, ws) {
 
-    let timeNowSpan;
+//     let timeNowSpan;
 
-    while (isTyping === true) {
-        // console.log("typing.....")
-        let timeNow = new Date().getTime();
-        // timeNowSpan = timeOfPress[0] + 5000;
-        timeNowSpan = timestamp + 10000;
-        if (timeNowSpan < timeNow) {
-            console.log("86. stop writing")
-            isTyping = false;
+//     while (isTyping === true) {
+//         // console.log("typing.....")
+//         let timeNow = new Date().getTime();
+//         // timeNowSpan = timeOfPress[0] + 5000;
+//         timeNowSpan = timestamp + 10000;
+//         if (timeNowSpan < timeNow) {
+//             console.log("86. stop writing")
+//             isTyping = false;
             
-        };
-        console.log("varför måste denna finnas?!??!!?", isTyping);
+//         };
+//         console.log("varför måste denna finnas?!??!!?", isTyping);
 
-        let objBroadcast = {
-            type: "someoneIsTyping",
-            msg: isTyping,
-        };
-        //console.log("case text", objBroadcast)
-        // broadcast to all but this ws...
-        broadcastButExclude(wss, ws, objBroadcast);
-        // wss.clients.forEach(client => {
+//         let objBroadcast = {
+//             type: "someoneIsTyping",
+//             msg: isTyping,
+//         };
+//         //console.log("case text", objBroadcast)
+//         // broadcast to all but this ws...
+//         broadcastButExclude(wss, ws, objBroadcast);
+//         // wss.clients.forEach(client => {
 
-        //     client.send(JSON.stringify({
-        //         type: "someoneIsTyping",
-        //         msg: isTyping,
-        //     }));
-        // });
+//         //     client.send(JSON.stringify({
+//         //         type: "someoneIsTyping",
+//         //         msg: isTyping,
+//         //     }));
+//         // });
         
-    };
+//     };
 
-};
+// };
 
-wss.isTyping = function (time, ws) {
+// wss.isTyping = function (time, ws) {
 
-    let timestamp = time;
+//     let timestamp = time;
 
-    isTyping = true;
-    wss.timeNow(isTyping, timestamp, ws);
-};
+//     isTyping = true;
+//     wss.timeNow(isTyping, timestamp, ws);
+// };
 
 
 wss.uniqueId = function () {
@@ -227,16 +227,17 @@ wss.on("connection", (ws) => {
             }
             case "someoneIsTyping": {
 
-                console.log(obj.time)
-                wss.isTyping(obj.time, ws)
+                console.log("test someoneistyping", obj)
+                // console.log(obj.time)
+                // wss.isTyping(obj.time, ws)
 
-                // let objBroadcast = {
-                //     type: "someoneIsTyping",
-                //     nickname: obj.nickname,
-                //     msg: isTyping,
-                // };
-                // console.log("case someoneIsTyping", objBroadcast)
-                // broadcastButExclude(wss, ws, objBroadcast);
+                let objBroadcast = {
+                    type: "someoneIsTyping",
+                    nickname: obj.nickname,
+                    msg: obj.msg,
+                };
+                console.log("case someoneIsTyping", objBroadcast)
+                broadcastButExclude(wss, ws, objBroadcast);
 
                 break;
             }
