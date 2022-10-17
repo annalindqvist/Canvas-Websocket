@@ -22,36 +22,50 @@
     <!-- DOM chat -->
     <div id="chat">
         <div id="onlineClients"></div>
-            <ul id="chatThread"></ul>
+        <ul id="chatThread"></ul>
         <canvas id="canvas" display="none"></canvas>
-
         <div id="chatfeedback">
-            <div class="chat-bubble">
-                <div class="typing">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            </div>
+            <!-- <div class="chat-bubble">
+                    <div class="typing">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div> -->
         </div>
+        
         <!-- input chat -->
         <div id="chatInput">
-            
+            <div id="canvasTools">
+                <div id="blue"></div>
+                <div id="yellow"></div>
+                <div id="red"></div>
+                <div id="green"></div>
+                <div id="black"></div>
+                <div id="white"></div>
+                <div id="orange"></div>
+                <div id="purple"></div>
+                <div id="brown"></div>
+                <div id="pink"></div>
+            </div>
+
             <div id="chatInputField">
                 <input type="text" id="inputText" placeholder="Ps. only nice messages goes here">
                 <div id="trigger">😎</div>
                 <div id="drawBtn">🖌️</div>
             </div>
-           
+
 
             <section id="selection-outer" class="empty">
                 <div id="selection">
                     <div id="selection-emoji" class="empty"></div>
                 </div>
             </section>
-           
+
             <button id="sendMsgBtn">Send</button>
         </div>
+
+
 
     </div>
 

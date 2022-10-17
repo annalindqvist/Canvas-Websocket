@@ -32,6 +32,7 @@
 #onlineClients {
     display: flex;
 }
+
 #onlineClients div {
     max-width: fit-content;
     border-radius: 1rem;
@@ -39,9 +40,10 @@
     border: 1px solid rebeccapurple;
     margin: 0.5rem;
 }
+
 #chatThread {
     list-style: none;
-    height: 80vh;
+    max-height: 80vh;
     margin: 2rem;
     overflow-y: scroll;
 }
@@ -53,20 +55,59 @@
     margin: 1rem;
 }
 
-#chatMsgContainer, #chatImgMsgContainer {
+#chatMsgContainer,
+#chatImgMsgContainer {
     padding: 0.5rem 1rem;
 }
 
-#msgTime, #imgMsgTime {
+#msgTime,
+#imgMsgTime {
     font-size: 12px;
 }
 
-#msgNickname, #imgMsgNickname {
+#msgNickname,
+#imgMsgNickname {
     font-size: 12px;
     position: absolute;
     top: 0;
     font-weight: medium;
 }
+
+
+#canvas {
+    display: none;
+    position: absolute;
+    top: 0;
+}
+
+img {
+    max-width: 40%;
+    max-height: 40%;
+}
+
+.alignLeft {
+    justify-content: left;
+}
+
+#chatThread .alignLeft #chatMsgContainer {
+    margin-right: 1rem;
+    background-color: rgb(194, 140, 255);
+    border-radius: 0 1rem 1rem 1rem;
+}
+
+.alignRight {
+    justify-content: right;
+
+}
+
+#chatThread .alignRight #chatMsgContainer {
+    margin-left: 1rem;
+    background-color: rgb(223, 196, 255);
+    border-radius: 1rem 0 1rem 1rem;
+}
+
+
+
 
 #chatInput {
     position: absolute;
@@ -85,7 +126,8 @@
     margin: 1rem;
 }
 
-#chatInput #drawBtn, #chatInput #trigger {
+#chatInput #drawBtn,
+#chatInput #trigger {
     width: 1rem;
     height: 1rem;
     border-radius: 1rem;
@@ -99,54 +141,66 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
 #chatInput #trigger {
     right: 2.5rem;
 }
+
 #chatInput #drawBtn {
     right: 1.5rem;
 }
 
-#canvas {
-    display: none;
-    position: absolute;
-    top: 0;
-}
-
-img {
-    max-width: 40%;
-    max-height: 40%;
-}
-
-.alignLeft {
-    justify-content: left;
-}
-#chatThread .alignLeft #chatMsgContainer{
-    margin-right: 1rem;
-    background-color: rgb(194, 140, 255);
-    border-radius: 0 1rem 1rem 1rem;
-}
-
-.alignRight {
-    justify-content: right;
-    
-}
-#chatThread .alignRight #chatMsgContainer{
-    margin-left: 1rem;
-    background-color: rgb(223, 196, 255);
-    border-radius: 1rem 0 1rem 1rem;
-}
-
 #chatfeedback {
-   
+
     background-color: darkkhaki;
     margin: 1rem;
 }
 
 #chatfeedback p {
-   
-   background-color: green;
+    background-color: green;
+}
+
+#canvasTools {
+    display: none;
     
 }
+#canvasTools div {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    margin: 0.5rem;
+}
+#blue{
+    background-color: blue;
+}
+#yellow{
+    background-color: yellow;
+}
+#red{
+    background-color: red;
+}
+#green{
+    background-color: green;
+}
+#black{
+    background-color: black;
+}
+#white{
+    background-color: white;
+}
+#orange{
+    background-color: orange;
+}
+#purple{
+    background-color: purple;
+}
+#brown{
+    background-color: brown;
+}
+#pink {
+    background-color: pink;
+}
+
 
 /* .chat-bubble {
     background-color: #E6F8F1;

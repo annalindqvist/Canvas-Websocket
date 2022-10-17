@@ -19,16 +19,21 @@ const canvas = document.getElementById("canvas");
 let onlineClientsContainer = document.getElementById("onlineClients");
 const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
+const canvasTools = document.getElementById("canvasTools");
 
 const chatfeedback = document.getElementById("chatfeedback");
 
-// variable current user | nickname
+// --- variables 
 let nickname;
 let isTyping = false;
 let lastKeyPress;
+let colorOfPencil = black;
 
 // use WebSocket >>> make sure server uses same ws port!
-const websocket = new WebSocket("ws://localhost:80");
+const baseURL = window.location.href.split("//")[1];
+const protocol = 'wss';
+const websocket = new WebSocket(`${protocol}://${baseURL}`);
+//const websocket = new WebSocket("ws://localhost:80");
 
 
 // --- EVENT LISTENERS ---
@@ -55,11 +60,11 @@ websocket.addEventListener("message", (e) => {
     switch (obj.type) {
         case "text":
             renderMessage(obj, className);
-            isTypingContainer.innerHTML = "";
+            chatfeedback.innerHTML = "";
             break;
         case "url":
             renderMessage(obj, className);
-            isTypingContainer.innerHTML = "";
+            chatfeedback.innerHTML = "";
             break;
         case "newClient": {
             renderMessage(obj)
@@ -102,10 +107,14 @@ setNickname.addEventListener("click", () => {
 // --- 1. Press enter to send
 inputText.addEventListener("keydown", (e) => {
 
-   lastKeyPress = new Date().getTime();
-
+    if (e.key !== "Enter") {
+        lastKeyPress = new Date().getTime();
+    }
+   
     if (e.key === "Enter" && inputText.value.length > 0) {
         handleMessage();
+        isTyping = false;
+        sendTypingToServer();
     }
 
 });
@@ -115,6 +124,12 @@ sendBtn.addEventListener("click", (e) => {
 
     if (e.target == sendBtn && inputText.value.length > 0) {
         handleMessage();
+        isTyping = false;
+        sendTypingToServer();
+    } else if (canvas.style.display = "block") {
+        canvas.style.display = 'none';
+        canvasTools.style.display = 'none'
+        saveImgToUrl()
     }
 });
 // --- Listen on keypress and send timestamp to server for visual feedback
@@ -144,12 +159,12 @@ function checkIsTyping () {
 
         // 5sek + 2sek from setinterval in websocket open 
         if (timeNow < timeDifferense) {
-            console.log("timedifferense less than 20sek", timeDifferense)
+            console.log("timedifferense less than 5sek", timeDifferense)
             isTyping = true;
 
         }
         else if (timeNow > timeDifferense) {
-            console.log("timedifferense bigger than 20sek", timeDifferense) 
+            console.log("timedifferense bigger than 5sek", timeDifferense) 
             lastKeyPress = "";
             isTyping = false;
             
@@ -242,26 +257,7 @@ function parseJSON(data) {
 // obj.type to see if there is an textMessage, url(img)Message or someone logged in
 
 function renderMessage(obj, className) {
-    // // use template - cloneNode to get a document fragment
-    // let template = document.getElementById("message").cloneNode(true);
-
-    // //console.log("test render", obj)
-    // // access content
-    // let newMsg = template.content;
-
-    // // class to style element to right or left in chat
-    // newMsg.querySelector("li").className = className;
-
-    // // change content...
-    // newMsg.getElementById("msgNickname").innerText = obj.nickname;
-    // newMsg.getElementById("chatMsgContent").innerText = obj.msg;
-
-    // // visual: 10:41
-    // newMsg.getElementById("msgTime").innerText = currentTime();
-
-    // // render using prepend method - last message first
-    // chatThread.appendChild(newMsg);
-
+ 
     switch (obj.type) {
 
         case "text":
@@ -306,16 +302,6 @@ function renderMessage(obj, className) {
     }
 }
 
-// function newClientLogIn(obj) {
-
-//     // use template - cloneNode to get a document fragment
-//     let template = document.getElementById("message").cloneNode(true);
-//     // access content
-//     let newMsg = template.content;
-//     newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
-//     chatThread.appendChild(newMsg);
-// }
-
 function clientDisconnected(obj) {
 
     if (!obj) {
@@ -329,7 +315,7 @@ function clientDisconnected(obj) {
     chatThread.appendChild(newMsg);
 }
 
-
+// --- Clear canvas ---
 function clearCanvas() {
     const ctx = canvas.getContext('2d');
 
@@ -340,38 +326,38 @@ function clearCanvas() {
 }
 
 drawBtn.addEventListener('click', (e) => {
-    if (canvas.style.display != "block") {
+    if (canvas.style.display != "block" && canvasTools.style.display != 'flex') {
         clearCanvas()
         canvas.style.display = 'block';
-    } else if (canvas.style.display = "block") {
+        canvasTools.style.display = 'flex'
+
+    } else if (canvas.style.display = "block" && canvasTools.style.display == 'flex') {
         console.log("drawBtn onclick: canvas display: block");
         canvas.style.display = 'none';
-        saveImgToUrl()
+        canvasTools.style.display = 'none'
     }
 });
 
+canvasTools.addEventListener("click", (e) => {
+    colorOfPencil = e.target.id;
+});
 
 function init(e) {
     const ctx = canvas.getContext('2d');
 
     const rect = canvas.getBoundingClientRect()
-    // const x = e.clientX - rect.left
-    // const y = e.clientY - rect.top
-    // console.log("x: " + x + " y: " + y)
     console.log("canvas.getBoundingClientRect(),", canvas.getBoundingClientRect())
 
     let startX = e.clientX - rect.left;
     let startY = e.clientY - rect.top;
 
-    // const canvasOffsetX = canvas.offsetLeft;
-    // const canvasOffsetY = canvas.offsetTop;
 
     canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
-    canvas.height = window.innerHeight - 200;
+    canvas.height = window.innerHeight - 100;
     // canvas.width = 300;
     // canvas.height = 300;
 
-    let lineWidth = 20;
+    let lineWidth = 10;
 
     let isPainting = false;
     const initPaint = (e) => {
@@ -390,7 +376,7 @@ function init(e) {
 
     const paint = (e) => {
         if (!isPainting) return;
-
+        ctx.strokeStyle = colorOfPencil;
         ctx.lineWidth = lineWidth;
         ctx.lineCap = 'round';
         //console.log("paint X", e.clientX)
