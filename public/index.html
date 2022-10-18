@@ -22,8 +22,8 @@
             <p>*Min 1 character, max 10 characters</p>
             <button id="setNickname">Set nickname</button>
         </div>
-       
-        
+
+
     </div>
 
     <!-- DOM chat -->
@@ -31,18 +31,10 @@
         <div id="onlineClients"></div>
         <ul id="chatThread"></ul>
         <canvas id="canvas" display="none"></canvas>
-        <div id="chatfeedback">
-            <!-- <div class="chat-bubble">
-                    <div class="typing">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                </div> -->
-        </div>
+        <div id="chatfeedback"></div>
 
         <!-- input chat -->
-        <div id="chatInput">
+        <div id="bottomOfChat">
             <div id="canvasTools">
                 <div id="blue"></div>
                 <div id="yellow"></div>
@@ -56,20 +48,25 @@
                 <div id="pink"></div>
             </div>
 
-            <div id="chatInputField">
-                <input type="text" id="inputText" placeholder="Ps. only nice messages goes here">
-                <div id="trigger">😎</div>
-                <div id="drawBtn">🖌️</div>
+            <div id="chatInputs">
+                <div id="chatInputField">
+                    <input type="text" id="inputText" placeholder="Pls, only nice messages">
+                    <div id="trigger">😎</div>
+                </div>
+                <div id="chatInputBtns">
+                    <div id="drawBtn">🖌️</div>
+                    <div id="sendMsgBtn"></div>
+                </div>
             </div>
 
-
+            <!-- emojipicket from picmo -->
             <section id="selection-outer" class="empty">
                 <div id="selection">
                     <div id="selection-emoji" class="empty"></div>
                 </div>
             </section>
 
-            <button id="sendMsgBtn">Send</button>
+
         </div>
 
 

@@ -30,3 +30,8 @@ Minimum krav:
 
 // Extra stuff jag valde att göra:
 - Hosta på render.com
+
+// Saker jag önskade var bättre
+- Funktionen om någon skriver, den bör sluta direkt när man klickar på skickaknappen, gör det inte nu. Räknar ner från senaste knapptrycket endå.
+- Designen behöver mer kärlek
+- Roligare canvas-funktion

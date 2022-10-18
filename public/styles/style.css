@@ -6,6 +6,8 @@
     padding: 0;
     font-family: 'Poppins', sans-serif;
     color: #1c1c1c;
+    max-width: 100vw;
+    max-height: 100vh;
 }
 
 #logIn {
@@ -61,7 +63,7 @@
     max-width: 100%;
     height: 100vh;
     position: relative;
-    padding: 1rem;
+    padding: 0.5rem;
     background-color: rgb(255, 254, 253);
 
     display: none;
@@ -81,7 +83,6 @@
     max-height: 2rem;
     border-radius: 2rem;
     padding: 0.5rem;
-    /* border: 1px solid rebeccapurple; */
     background-color: rgb(164, 134, 194);
     color: rgb(246, 239, 255);
     margin: 0.5rem;
@@ -90,7 +91,6 @@
 #chatThread {
     list-style: none;
     max-height: 80vh;
-
     overflow-y: scroll;
 }
 
@@ -187,27 +187,39 @@ img {
     color: rgb(255, 254, 253);
 }
 
-
-
-#chatInput {
+#bottomOfChat {
     position: absolute;
     bottom: 0;
+    /* display: flex; */
 }
-
+#chatInputs {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 100vw;
+}
 #chatInputField {
     position: relative;
+    width: 85vw;
+}
+#chatInputBtns {
+    display: flex;
+    align-items: center;
 }
 
-#chatInput #inputText {
-    padding: 0.5rem 3rem 0.5rem 1.5rem;
-    width: 70vw;
-    border: 2px solid blueviolet;
-    border-radius: 2rem;
+#chatInputBtns div:first-child {
     margin: 1rem;
 }
 
-#chatInput #drawBtn,
-#chatInput #trigger {
+
+#chatInputs #inputText {
+    padding: 0.5rem 2.5rem 0.5rem 1.5rem;
+    width: 100%;
+    border: 2px solid blueviolet;
+    border-radius: 2rem;
+}
+
+#bottomOfChat #trigger {
     width: 1rem;
     height: 1rem;
     border-radius: 1rem;
@@ -215,19 +227,33 @@ img {
     justify-content: center;
     align-items: center;
     position: absolute;
-    right: 1.5rem;
+    right: 0.5rem;
+    z-index: 9;
     top: 50%;
     bottom: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
-#chatInput #trigger {
-    right: 2.5rem;
-}
+/* 
+#bottomOfChat #drawBtn {
+    right: 1rem;
+} */
 
-#chatInput #drawBtn {
-    right: 1.5rem;
+#bottomOfChat #sendMsgBtn {
+    background-image: url("https://img.icons8.com/external-soft-fill-juicy-fish/60/000000/external-send-love-soft-fill-soft-fill-juicy-fish-2.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 1.5rem;
+    height: 1.5rem;
+    /* position: absolute;
+    top: 50%;
+    bottom: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    right: 0; */
+
 }
 
 #chatfeedback {

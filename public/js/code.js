@@ -339,6 +339,32 @@ drawBtn.addEventListener('click', (e) => {
     }
 });
 
+function onlineClients(obj) {
+
+    onlineClientsContainer.innerHTML = '';
+    obj.forEach(client => {
+
+        const nameBubble = document.createElement("div");
+        nameBubble.innerText = client.nickname;
+
+        onlineClientsContainer.appendChild(nameBubble)
+    });
+};
+
+const saveImgToUrl = () => {
+
+    let img = canvas.toDataURL('image/png');
+    let imgMsg = {
+        type: "url",
+        msg: img,
+        nickname: nickname,
+    };
+    let className = "alignRight";
+    renderMessage(imgMsg, className);
+    // send to server
+    websocket.send(JSON.stringify(imgMsg));
+};
+
 canvasTools.addEventListener("click", (e) => {
     colorOfPencil = e.target.id;
 });
@@ -388,43 +414,17 @@ function init(e) {
     canvas.onmousemove = paint;
     window.onmouseup = finishPaint;
 
+    canvas.ontouchstart = initPaint;
+    canvas.ontouchmove = initPaint;
+    window.ontouchend = initPaint;
+
 }
 
 window.onload = init;
 
-const saveImgToUrl = () => {
 
-    let img = canvas.toDataURL('image/png');
-    console.log("saveImgToUrl", img)
-    // let imgSubst = img.substr(img.indexOf(',')+1).toString()
-    // console.log("img", imgSubst)
 
-    let imgMsg = {
-        type: "url",
-        msg: img,
-        nickname: nickname,
-    };
-    console.log("imgMsg", imgMsg)
-    //renderImgMsg(imgMsg)
 
-    let className = "alignRight";
-    renderMessage(imgMsg, className)
-    // send to server
-    websocket.send(JSON.stringify(imgMsg));
-
-}
-
-function onlineClients(obj) {
-
-    onlineClientsContainer.innerHTML = '';
-    obj.forEach(client => {
-
-        const nameBubble = document.createElement("div");
-        nameBubble.innerText = client.nickname;
-
-        onlineClientsContainer.appendChild(nameBubble)
-    });
-}
 
 // --- EMOJI PICKER ---
 // https://github.com/joeattardi/picmo
