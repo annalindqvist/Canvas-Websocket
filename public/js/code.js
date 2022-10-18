@@ -24,25 +24,23 @@ let lastKeyPress;
 let colorOfPencil = black;
 
 // use WebSocket >>> make sure server uses same ws port!
-const baseURL = window.location.href.split("//")[1];
-const protocol = 'wss';
-const websocket = new WebSocket(`${protocol}://${baseURL}`);
-//const websocket = new WebSocket("ws://localhost:80");
+//const baseURL = window.location.href.split("//")[1];
+//const protocol = 'wss';
+//const websocket = new WebSocket(`${protocol}://${baseURL}`);
+const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
 // listen on close event (server)
 websocket.addEventListener("close", (e) => {
-    // gif doesnt show? why?
     document.getElementById("serverDown").style.display = 'flex';
     chat.style.display = 'none';
     logInContainer.style.display = 'none';
     setInterval(reloadPage, 4000);
-
 });
 
+// when ws is open checks runs function checkIsTyping every 2 seconds
 websocket.addEventListener("open", (e) => {
-    console.log("websocket open")
     setInterval(checkIsTyping, 2000);
 
 });
