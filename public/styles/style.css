@@ -31,13 +31,21 @@
 
 #onlineClients {
     display: flex;
+    max-width: 100vw;
+    overflow-x: scroll;
 }
 
 #onlineClients div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     max-width: fit-content;
-    border-radius: 1rem;
+    max-height: 2rem;
+    border-radius: 2rem;
     padding: 0.5rem;
-    border: 1px solid rebeccapurple;
+    /* border: 1px solid rebeccapurple; */
+    background-color: rgb(164, 134, 194);
+    color: rgb(246, 239, 255);
     margin: 0.5rem;
 }
 
@@ -239,13 +247,11 @@ img {
     border-bottom-left-radius: 2px;
     display: none;
 }
-
 .typing {
     align-items: center;
     display: flex;
     height: 17px;
 }
-
 .typing .dot {
     animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
     background-color: #6CAD96;
@@ -256,34 +262,27 @@ img {
     width: 7px;
     display: inline-block;
 }
-
 .typing .dot:nth-child(1) {
     animation-delay: 200ms;
 }
-
 .typing .dot:nth-child(2) {
     animation-delay: 300ms;
 }
-
 .typing .dot:nth-child(3) {
     animation-delay: 400ms;
 }
-
 .typing .dot:last-child {
     margin-right: 0;
 }
-
 @keyframes mercuryTypingAnimation {
     0% {
         transform: translateY(0px);
         background-color: #6CAD96; 
     }
-
     28% {
         transform: translateY(-7px);
         background-color: #9ECAB9; 
     }
-
     44% {
         transform: translateY(0px);
         background-color: #B5D9CB; 

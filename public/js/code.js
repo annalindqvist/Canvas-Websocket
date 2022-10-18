@@ -3,12 +3,6 @@
 import {
     createPopup
 } from 'https://unpkg.com/@picmo/popup-picker@latest/dist/index.js?module';
-// import { caseInsensitiveIncludes } from 'picmo';
-// import { createPicker } from "../../node_modules/picmo";
-// import { TwemojiRenderer } from "../../node_modules/@picmo/renderer-twemoji";
-
-//import{ createPicker } from 'https://unpkg.com/picmo@latest/dist/index.js';
-
 
 // DOM elements
 const inputText = document.getElementById("inputText");
@@ -30,14 +24,12 @@ let lastKeyPress;
 let colorOfPencil = black;
 
 // use WebSocket >>> make sure server uses same ws port!
-const baseURL = window.location.href.split("//")[1];
-const protocol = 'ws';
-const websocket = new WebSocket(`${protocol}://${baseURL}`);
-//const websocket = new WebSocket("ws://localhost:80");
-
+// const baseURL = window.location.href.split("//")[1];
+// const protocol = 'wss';
+// const websocket = new WebSocket(`${protocol}://${baseURL}`);
+const websocket = new WebSocket("ws://localhost:3000");
 
 // --- EVENT LISTENERS ---
-
 
 // listen on close event (server)
 websocket.addEventListener("close", (e) => {
@@ -146,8 +138,6 @@ inputText.addEventListener("keypress", (e) => {
 
     websocket.send(JSON.stringify(objMessage));
 })
-
-//const chatFeedback = document.getElementsByClassName("chat-bubble")
 
 // --- Check if someone is typing 
 function checkIsTyping () {
