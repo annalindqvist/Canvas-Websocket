@@ -24,10 +24,10 @@ let lastKeyPress;
 let colorOfPencil = black;
 
 // use WebSocket >>> make sure server uses same ws port!
-const baseURL = window.location.href.split("//")[1];
-const protocol = 'wss';
-const websocket = new WebSocket(`${protocol}://${baseURL}`);
-//const websocket = new WebSocket("ws://localhost:80");
+// const baseURL = window.location.href.split("//")[1];
+// const protocol = 'wss';
+// const websocket = new WebSocket(`${protocol}://${baseURL}`);
+const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
@@ -37,6 +37,7 @@ websocket.addEventListener("close", (e) => {
     document.getElementById("serverDown").style.display = 'flex';
     chat.style.display = 'none';
     logInContainer.style.display = 'none';
+    setInterval(reloadPage, 4000);
 
 });
 
@@ -78,6 +79,10 @@ websocket.addEventListener("message", (e) => {
     }
 
 });
+
+function reloadPage () {
+    location.reload();
+}
 
 
 // --- Set nickname and send to server ---
