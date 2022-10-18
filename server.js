@@ -28,7 +28,7 @@ import {
 /* application variables
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
-const port = 80;
+const port = 3000;
 
 
 /* express
@@ -60,11 +60,6 @@ const wss = new WebSocketServer({
 server.on("upgrade", (req, socket, head) => {
     console.log("Upgrade event client: ", req.headers);
 
-    // use authentication - only logged in users allowed ?
-    // socket.write('HTTP/1.1 401 Unauthorized\r\nWWW-Authenticate: Basic\r\n\r\n');
-    // socket.destroy();
-    // return;
-
     // start websocket
     wss.handleUpgrade(req, socket, head, (ws) => {
         console.log("let user use websocket...");
@@ -75,51 +70,6 @@ server.on("upgrade", (req, socket, head) => {
 
 let connectedClients = [];
 let disconnectedClient;
-// let isTyping = false;
-
-// wss.timeNow = function (isTyping, timestamp, ws) {
-
-//     let timeNowSpan;
-
-//     while (isTyping === true) {
-//         // console.log("typing.....")
-//         let timeNow = new Date().getTime();
-//         // timeNowSpan = timeOfPress[0] + 5000;
-//         timeNowSpan = timestamp + 10000;
-//         if (timeNowSpan < timeNow) {
-//             console.log("86. stop writing")
-//             isTyping = false;
-            
-//         };
-//         console.log("varför måste denna finnas?!??!!?", isTyping);
-
-//         let objBroadcast = {
-//             type: "someoneIsTyping",
-//             msg: isTyping,
-//         };
-//         //console.log("case text", objBroadcast)
-//         // broadcast to all but this ws...
-//         broadcastButExclude(wss, ws, objBroadcast);
-//         // wss.clients.forEach(client => {
-
-//         //     client.send(JSON.stringify({
-//         //         type: "someoneIsTyping",
-//         //         msg: isTyping,
-//         //     }));
-//         // });
-        
-//     };
-
-// };
-
-// wss.isTyping = function (time, ws) {
-
-//     let timestamp = time;
-
-//     isTyping = true;
-//     wss.timeNow(isTyping, timestamp, ws);
-// };
-
 
 wss.uniqueId = function () {
     let id = uuidv4();
@@ -139,11 +89,11 @@ wss.on("connection", (ws) => {
         // client.send(`{"id": "${client.id}}`)
     })
 
-    // WebSocket events (ws) for single client
+    // --- WebSocket events (ws) for single client ---
 
-    // close event
+    // -- close event
     ws.on("close", () => {
-        // får ut id:t på den som lämnar men vill använda nickname för att skriva ut det i chatten?
+        // Får ut id:t på den som lämnar
         console.log("Client disconnected", ws.id);
         console.log(
             "Number of remaining connected clients: ",
@@ -165,18 +115,16 @@ wss.on("connection", (ws) => {
 
     });
 
-    // message event
+    // -- message event
     ws.on("message", (data) => {
-        // console.log('Message received: %s', data);
 
         let obj = parseJSON(data);
         console.log(obj)
         let objBroadcast = {};
-        // todo
-        // use obj property 'type' to handle message event
+       
+        // -- obj property 'type' to handle message event
         switch (obj.type) {
             case "text":
-                // chatt historik i "state"objekt? /array?  payload
                 // message to clients
                 objBroadcast = {
                     type: "text",
@@ -184,7 +132,6 @@ wss.on("connection", (ws) => {
                     nickname: obj.nickname,
                 };
                 console.log("case text", objBroadcast)
-                // broadcast to all but this ws...
                 broadcastButExclude(wss, ws, objBroadcast);
 
                 break;
@@ -214,54 +161,29 @@ wss.on("connection", (ws) => {
                     onlineClients: connectedClients,
                 };
 
-                console.log("rad 173 connectedclients", connectedClients)
-                //console.log("case newClient", objBroadcast)
-
                 wss.clients.forEach((client) => {
-
                     client.send(JSON.stringify(objBroadcast));
-
                 });
+                // visar inte inloggade förän nästa händelse sker, enbart login eller alla händelser?
                 //broadcastButExclude(wss, ws, objBroadcast);
                 break;
             }
             case "someoneIsTyping": {
-
-                console.log("test someoneistyping", obj)
-                // console.log(obj.time)
-                // wss.isTyping(obj.time, ws)
-
                 let objBroadcast = {
                     type: "someoneIsTyping",
                     nickname: obj.nickname,
                     msg: obj.msg,
                 };
-                console.log("case someoneIsTyping", objBroadcast)
+                //console.log("case someoneIsTyping", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
 
                 break;
             }
-            // case "stoppedTyping": {
-
-            //     //console.log(obj.time)
-            //     //wss.isTyping(obj.time)
-
-            //     let objBroadcast = {
-            //         type: "stoppedTyping",
-            //         msg: isTyping,
-            //     };
-            //     console.log("case stoppedTyping", objBroadcast)
-            //     broadcastButExclude(wss, ws, objBroadcast);
-
-            //     break;
-            // }
             default:
                 break;
         }
     });
 });
-
-
 
 /* listen on initial connection
 ------------------------------- */

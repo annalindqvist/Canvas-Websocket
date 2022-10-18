@@ -139,8 +139,6 @@ inputText.addEventListener("keypress", (e) => {
     websocket.send(JSON.stringify(objMessage));
 })
 
-//const chatFeedback = document.getElementsByClassName("chat-bubble")
-
 // --- Check if someone is typing 
 function checkIsTyping () {
 
