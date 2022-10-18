@@ -57,6 +57,13 @@
     color: #ececec;
     font-size: 0.8rem;
 }
+#logIn #setNickname {
+    margin: 1rem;
+    background-color: rgba(87, 0, 185, 1);
+    padding: 0.5rem 2rem;
+    border-radius: 2rem;
+    color: #ececec;
+}
 
 #chat {
     /* border: 3px solid blue; */
@@ -129,6 +136,11 @@
     display: none;
     position: absolute;
     top: 0;
+    border: 3px solid #1c1c1c;
+    left: 0;
+    /* right: 0;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */ 
 }
 
 img {

@@ -6,7 +6,7 @@ import {
 
 // DOM elements
 const inputText = document.getElementById("inputText");
-const setNickname = document.querySelector("#setNickname");
+const setNickname = document.getElementById("setNickname");
 const chatThread = document.getElementById("chatThread");
 const chat = document.getElementById("chat");
 const canvas = document.getElementById("canvas");
