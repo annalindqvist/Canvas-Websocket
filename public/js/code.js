@@ -27,7 +27,7 @@ let colorOfPencil = black;
 // const baseURL = window.location.href.split("//")[1];
 // const protocol = 'wss';
 // const websocket = new WebSocket(`${protocol}://${baseURL}`);
-const websocket = new WebSocket("ws://localhost:3000");
+const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
@@ -104,12 +104,16 @@ inputText.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") {
         lastKeyPress = new Date().getTime();
     }
-   
     if (e.key === "Enter" && inputText.value.length > 0) {
         handleMessage();
         isTyping = false;
         sendTypingToServer();
     }
+    // -- Trodde denna kunde göra så den slutar "skriva" om man klickat på enter och det är tommt i fältet.. 
+    // if (e.key === "Enter" && inputText.value.length === 0) {
+    //     isTyping = false;
+    //     sendTypingToServer();
+    // }
 
 });
 
@@ -188,6 +192,7 @@ function someoneIsTyping(obj) {
     } else if (obj.msg === true) {
         chatfeedback.innerHTML = "";
         let whoIsTyping = document.createElement("p");
+        whoIsTyping.className = "chatfeedback";
         whoIsTyping.innerText = obj.nickname + " is typing...";
         chatfeedback.appendChild(whoIsTyping);
         //chatFeedback.style.display = 'inline-block';
@@ -285,6 +290,7 @@ function renderMessage(obj, className) {
             let template = document.getElementById("message").cloneNode(true);
             // access content
             let newMsg = template.content;
+            newMsg.getElementById("chatMsgContainer").className = "chatfeedback";
             newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
             newMsg.getElementById("msgTime").innerText = currentTime();
             chatThread.appendChild(newMsg);

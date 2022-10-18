@@ -28,7 +28,11 @@ import {
 /* application variables
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
-const port = 3000;
+
+// -- Port 3000 for render.com
+//const port = 3000;
+// -- Port 80 for localhost
+const port = 80;
 
 
 /* express

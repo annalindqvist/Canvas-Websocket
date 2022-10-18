@@ -24,7 +24,7 @@
     height: 100vh;
     position: relative;
     padding: 1rem;
-    background-color: rgb(246, 239, 255);
+    background-color: rgb(255, 254, 253);
 
     display: none;
 }
@@ -52,7 +52,7 @@
 #chatThread {
     list-style: none;
     max-height: 80vh;
-    margin: 2rem;
+    
     overflow-y: scroll;
 }
 
@@ -60,25 +60,30 @@
     display: flex;
     align-items: center;
     position: relative;
-    margin: 1rem;
+    margin: 2rem 1rem 1rem 1rem;
 }
 
 #chatMsgContainer,
 #chatImgMsgContainer {
     padding: 0.5rem 1rem;
+   
 }
 
 #msgTime,
 #imgMsgTime {
     font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    color: rgb(87, 0, 185);
 }
 
 #msgNickname,
 #imgMsgNickname {
     font-size: 12px;
     position: absolute;
-    top: 0;
+    top: -20px;
     font-weight: medium;
+    color: rgb(87, 0, 185);
 }
 
 
@@ -98,9 +103,13 @@ img {
 }
 
 #chatThread .alignLeft #chatMsgContainer {
-    margin-right: 1rem;
-    background-color: rgb(194, 140, 255);
+    margin-left: 2rem;
+    background-color: rgb(131, 79, 192);
     border-radius: 0 1rem 1rem 1rem;
+    
+}
+#chatThread .alignLeft #chatMsgContainer p{
+    color: rgb(255, 254, 253);
 }
 
 .alignRight {
@@ -109,11 +118,32 @@ img {
 }
 
 #chatThread .alignRight #chatMsgContainer {
-    margin-left: 1rem;
-    background-color: rgb(223, 196, 255);
+    margin-right: 2rem;
+    background-color: rgb(230, 210, 255);
+    border-radius: 1rem 0 1rem 1rem;
+    
+}
+#chatThread .alignRight #chatImgMsgContainer {
+    margin-right: 2rem;
+    background-color: rgb(230, 210, 255);
     border-radius: 1rem 0 1rem 1rem;
 }
 
+#chatThread .alignLeft #chatImgMsgContainer {
+    margin-left: 2rem;
+    background-color: rgb(131, 79, 192);
+    border-radius: 0 1rem 1rem 1rem;
+    
+}
+.chatfeedback {
+    justify-content: left;
+    margin-left: 2rem;
+    background-color: rgb(131, 79, 192);
+    border-radius: 1rem;
+}
+.chatfeedback p{
+    color: rgb(255, 254, 253);
+}
 
 
 
@@ -170,7 +200,6 @@ img {
 
 #canvasTools {
     display: none;
-
 }
 
 #canvasTools div {
@@ -235,56 +264,3 @@ img {
     height: 300px;
     margin: 3rem;
 }
-
-/* .chat-bubble {
-    background-color: #E6F8F1;
-    padding: 16px 28px;
-    -webkit-border-radius: 20px;
-    -webkit-border-bottom-left-radius: 2px;
-    -moz-border-radius: 20px;
-    -moz-border-radius-bottomleft: 2px;
-    border-radius: 20px;
-    border-bottom-left-radius: 2px;
-    display: none;
-}
-.typing {
-    align-items: center;
-    display: flex;
-    height: 17px;
-}
-.typing .dot {
-    animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
-    background-color: #6CAD96;
-    border-radius: 50%;
-    height: 7px;
-    margin-right: 4px;
-    vertical-align: middle;
-    width: 7px;
-    display: inline-block;
-}
-.typing .dot:nth-child(1) {
-    animation-delay: 200ms;
-}
-.typing .dot:nth-child(2) {
-    animation-delay: 300ms;
-}
-.typing .dot:nth-child(3) {
-    animation-delay: 400ms;
-}
-.typing .dot:last-child {
-    margin-right: 0;
-}
-@keyframes mercuryTypingAnimation {
-    0% {
-        transform: translateY(0px);
-        background-color: #6CAD96; 
-    }
-    28% {
-        transform: translateY(-7px);
-        background-color: #9ECAB9; 
-    }
-    44% {
-        transform: translateY(0px);
-        background-color: #B5D9CB; 
-    
-}} */
