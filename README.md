@@ -11,12 +11,21 @@ If you want to clone the project to your computer follow this steps:
 1. copy this link: https://github.com/annalindqvist/Canvas-Websocket.git
 2. in vsc terminal type: git clone https://github.com/annalindqvist/Canvas-Websocket.git and press enter.
 - 2.1: cd into project " cd Canvas-Websocket.
+- 2.2: run "npm install" in terminal
 3. to run this on you localhost you need to change what port you run it on. 
 - 3.1: open server.js and make sure port is declared as: "const port = 80;".
 - 3.2: open public/js/code.js and make sure websocket is declared as: "const websocket = new WebSocket("ws://localhost:80");".
 - 3.4: dont forget to save! 
 4. to start project simply type: "node server.js" in terminal
 
+
+-------------------------------------
+
+# Questions about the buttons in the chat?
+
+- 😎 = to open the emojipicker from picmo
+- 🖌️ = to open the canvas or when open press again to close & clear the canvas.
+- The button next to 🖌️, (paperplain with hearts), you send your message or drawing.
 
 -------------------------------------
 # Skolans krav:

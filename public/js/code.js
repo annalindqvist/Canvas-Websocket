@@ -127,7 +127,7 @@ sendBtn.addEventListener("click", (e) => {
         handleMessage();
         isTyping = false;
         sendTypingToServer();
-    } else if (canvas.style.display = "block") {
+    } else if (canvas.style.display === "block") {
         canvas.style.display = 'none';
         canvasTools.style.display = 'none'
         saveImgToUrl()
@@ -302,6 +302,7 @@ function renderMessage(obj, className) {
             newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
             newMsg.getElementById("msgTime").innerText = currentTime();
             chatThread.appendChild(newMsg);
+            break;
         }
         default:
             break;
@@ -318,18 +319,20 @@ function clientDisconnected(obj) {
     let template = document.getElementById("message").cloneNode(true);
     // access content
     let newMsg = template.content;
+    newMsg.getElementById("chatMsgContainer").className = "chatfeedback";
     newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just left the chat.";
+    newMsg.getElementById("msgTime").innerText = currentTime();
     chatThread.appendChild(newMsg);
+    scrollToBottom();
 }
 
-// --- Clear canvas ---
+// --- Clear canvas with white background---
 function clearCanvas() {
     const ctx = canvas.getContext('2d');
 
     // White clear background of the canvas
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
 }
 
 drawBtn.addEventListener('click', (e) => {
@@ -352,7 +355,6 @@ function onlineClients(obj) {
 
         const nameBubble = document.createElement("div");
         nameBubble.innerText = client.nickname;
-
         onlineClientsContainer.appendChild(nameBubble)
     });
 };
@@ -377,19 +379,13 @@ canvasTools.addEventListener("click", (e) => {
 
 function init(e) {
     const ctx = canvas.getContext('2d');
-
     const rect = canvas.getBoundingClientRect()
-    console.log("canvas.getBoundingClientRect(),", canvas.getBoundingClientRect())
 
-    let startX = e.clientX - rect.left;
-    let startY = e.clientY - rect.top;
-
+    // let startX = e.clientX - rect.left;
+    // let startY = e.clientY - rect.top;
 
     canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
     canvas.height = window.innerHeight - 100;
-    // canvas.width = 300;
-    // canvas.height = 300;
-
     let lineWidth = 10;
 
     let isPainting = false;
