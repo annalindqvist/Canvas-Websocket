@@ -140,7 +140,8 @@
 
 }
 #chatImgMsgContainer {
-    max-width: fit-content;
+    max-width: 40%;
+    display: flex;
 }
 #msgTime,
 #imgMsgTime {
@@ -172,8 +173,8 @@
 }
 
 img {
-    max-width: 40%;
-    max-height: 40%;
+    max-width: 300px;
+    max-height: 300px;
 }
 
 

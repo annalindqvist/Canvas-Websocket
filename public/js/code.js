@@ -4,7 +4,7 @@ import {
     createPopup
 } from 'https://unpkg.com/@picmo/popup-picker@latest/dist/index.js?module';
 
-// DOM elements
+// --- DOM elements---
 const inputText = document.getElementById("inputText");
 const setNickname = document.getElementById("setNickname");
 const chatThread = document.getElementById("chatThread");
@@ -24,15 +24,21 @@ let isTyping = false;
 let lastKeyPress;
 let colorOfPencil = black;
 
-// use WebSocket >>> make sure server uses same ws port!
+// --- use WebSocket >>> make sure server uses same ws port!
+
+// -- if hosting on ex render.com use (const baseURL, protocol & first constwebsocket)
+// --and comment out "const websocket = new WebSocket("ws://localhost:80");"
 //const baseURL = window.location.href.split("//")[1];
 //const protocol = 'wss';
 //const websocket = new WebSocket(`${protocol}://${baseURL}`);
+
+// -- open with localhost use this one
 const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
-// listen on close event (server)
+// -- listen on close event (server) & reload page every 4 seconds to try again 
+//(render needs the reload if you are not active on the page)
 websocket.addEventListener("close", (e) => {
     document.getElementById("serverDown").style.display = 'flex';
     chat.style.display = 'none';
@@ -40,18 +46,16 @@ websocket.addEventListener("close", (e) => {
     setInterval(reloadPage, 4000);
 });
 
-// when ws is open checks runs function checkIsTyping every 2 seconds
+// -- when ws is open, runs function checkIsTyping every 2 seconds (to see if someone is typing)
 websocket.addEventListener("open", (e) => {
     setInterval(checkIsTyping, 2000);
 
 });
 
-// listen to messages from client | server
+// -- listen to messages from client | server
 websocket.addEventListener("message", (e) => {
-
     let obj = parseJSON(e.data);
     let className = "alignLeft";
-
     switch (obj.type) {
         case "text":
             renderMessage(obj, className);
@@ -66,7 +70,6 @@ websocket.addEventListener("message", (e) => {
             onlineClients(obj.onlineClients);
         }
         case "disconnect": {
-            console.log("test", obj.onlineClients)
             onlineClients(obj.onlineClients);
             clientDisconnected(obj.disconnectedClient)
             break;
@@ -80,27 +83,30 @@ websocket.addEventListener("message", (e) => {
 
 });
 
+// -- function to reload page
 function reloadPage() {
     location.reload();
 }
 
-
-
 // --- Set nickname and send to server ---
 setNickname.addEventListener("click", () => {
+    
     nickname = document.getElementById("nickname").value;
-
-    let objMessage = {
-        type: "newClient",
-        nickname: nickname,
-    };
-
-    // send new login/new client to server
-    websocket.send(JSON.stringify(objMessage));
-
-    // hide login container and show chat
-    logInContainer.style.display = 'none';
-    chat.style.display = 'block';
+    if (nickname) {
+        let objMessage = {
+            type: "newClient",
+            nickname: nickname,
+        };
+        // send new login/new client to server
+        websocket.send(JSON.stringify(objMessage));
+        // hide login container and show chat
+        logInContainer.style.display = 'none';
+        chat.style.display = 'block';
+    } else {
+        document.getElementById("nicknameHelper").classList.add("animate__animated")
+        document.getElementById("nicknameHelper").classList.add("animate__shakeX")
+    }
+   
 });
 
 // --- Listen on input.value to send msg to chat ---
@@ -133,6 +139,7 @@ sendBtn.addEventListener("click", (e) => {
     } else if (canvas.style.display === "block") {
         canvas.style.display = 'none';
         canvasTools.style.display = 'none'
+        inputText.style.display = 'block';
         saveImgToUrl()
     }
 });
@@ -291,6 +298,7 @@ function renderMessage(obj, className) {
             // access content
             let newImgMsg = imgTemplate.content;
             newImgMsg.getElementById("imgMsgContainer").className = className;
+            newImgMsg.getElementById("chatImgMsgContainer").className = className;
             newImgMsg.getElementById("imgMsg").src = obj.msg;
             newImgMsg.getElementById("imgMsgNickname").innerText = obj.nickname;
             newImgMsg.getElementById("imgMsgTime").innerText = currentTime();
