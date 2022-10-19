@@ -28,12 +28,12 @@ let colorOfPencil = black;
 
 // -- if hosting on ex render.com use (const baseURL, protocol & first constwebsocket)
 // --and comment out "const websocket = new WebSocket("ws://localhost:80");"
-//const baseURL = window.location.href.split("//")[1];
-//const protocol = 'wss';
-//const websocket = new WebSocket(`${protocol}://${baseURL}`);
+const baseURL = window.location.href.split("//")[1];
+const protocol = 'wss';
+const websocket = new WebSocket(`${protocol}://${baseURL}`);
 
 // -- open with localhost use this one
-const websocket = new WebSocket("ws://localhost:80");
+//const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
@@ -289,7 +289,6 @@ function renderMessage(obj, className) {
             newMsg.getElementById("msgTime").innerText = currentTime();
             // render using prepend method - last message first
             chatThread.appendChild(newMsg);
-
 
             break;
         case "url":
