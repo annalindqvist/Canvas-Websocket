@@ -88,7 +88,6 @@ function reloadPage() {
 
 // --- Set nickname and send to server ---
 setNickname.addEventListener("click", () => {
-    
     nickname = document.getElementById("nickname").value;
     if (nickname) {
         let objMessage = {
@@ -190,7 +189,6 @@ function someoneIsTyping(obj) {
 }
 // -- handle if someone typed a message and send to server
 function handleMessage() {
-
     let objMessage = {
         type: "text",
         msg: inputText.value,
@@ -234,7 +232,6 @@ function parseJSON(data) {
 // obj.type to see if there is an textMessage, url(img)Message or someone logged in
 function renderMessage(obj, className) {
     switch (obj.type) {
-
         case "text":
             // use template - cloneNode to get a document fragment
             let template = document.getElementById("message").cloneNode(true);
@@ -249,12 +246,10 @@ function renderMessage(obj, className) {
             newMsg.getElementById("msgTime").innerText = currentTime();
             // render using prepend method - last message first
             chatThread.appendChild(newMsg);
-
             break;
         case "url":
             // use IMG template - cloneNode to get a document fragment
             let imgTemplate = document.getElementById("imgMessage").cloneNode(true);
-            // access content
             let newImgMsg = imgTemplate.content;
             newImgMsg.getElementById("imgMsgContainer").className = className;
             newImgMsg.getElementById("chatImgMsgContainer").className = className;
@@ -262,12 +257,9 @@ function renderMessage(obj, className) {
             newImgMsg.getElementById("imgMsgNickname").innerText = obj.nickname;
             newImgMsg.getElementById("imgMsgTime").innerText = currentTime();
             chatThread.appendChild(newImgMsg);
-
             break;
         case "newClient": {
-            // use template - cloneNode to get a document fragment
             let template = document.getElementById("message").cloneNode(true);
-            // access content
             let newMsg = template.content;
             newMsg.getElementById("chatMsgContainer").className = "chatfeedback";
             newMsg.getElementById("chatMsgContent").innerText = obj.nickname + " " + "just joined the chat.";
@@ -313,7 +305,6 @@ drawBtn.addEventListener('click', (e) => {
         canvasTools.style.display = 'flex'
         inputText.style.display = 'none';
         trigger.style.display = 'none'
-
     } else if (canvas.style.display = "block" && canvasTools.style.display == 'flex') {
         canvas.style.display = 'none';
         canvasTools.style.display = 'none';
@@ -345,7 +336,7 @@ const saveImgToUrl = () => {
     websocket.send(JSON.stringify(imgMsg));
 };
 
-// -- colorOfPencil will be color of div
+// -- colorOfPencil will be color of div/used to change color of pencil when drawing
 canvasTools.addEventListener("click", (e) => {
     colorOfPencil = e.target.id;
 });

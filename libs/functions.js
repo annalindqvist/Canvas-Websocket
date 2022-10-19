@@ -1,5 +1,4 @@
 import { WebSocketServer } from "ws";
-
 /**
  * parse JSON
  *
@@ -7,31 +6,14 @@ import { WebSocketServer } from "ws";
  * @return {obj} 
  */
 function parseJSON(data) {
-
     // try to parse json
     try {
         let obj = JSON.parse(data);
-
         return obj;        
     } catch (error) {
-        
-        // log to file in real application....
         return {error: "An error receving data...expected json format"};
     }
 }
-
-function toUpperCases(string) {
-
-}
-
-function randomNumber() {
-
-    return 1;
-}
-
-
-
-
 /**
  * broadcast to clients
  *
@@ -39,13 +21,11 @@ function randomNumber() {
  * @param {obj} objBroadcast
  */
 function broadcast(wss, objBroadcast) {
-
     // broadcast to all clients
     wss.clients.forEach((client) => {
         client.send(JSON.stringify(objBroadcast));
     });
 }
-
 /**
  * broadcast to clients, but not itself
  *
@@ -54,7 +34,6 @@ function broadcast(wss, objBroadcast) {
  * @param {obj} objBroadcast
  */
  function broadcastButExclude(wss, wsExclude, objBroadcast) {
-
     // broadcast to all clients
     wss.clients.forEach((client) => {
         if (client !== wsExclude) {
@@ -62,5 +41,4 @@ function broadcast(wss, objBroadcast) {
         }
     });
 }
-
-export { parseJSON, toUpperCases, randomNumber, broadcast, broadcastButExclude }
+export { parseJSON, broadcast, broadcastButExclude }

@@ -23,8 +23,6 @@ import {
     info
 } from "console";
 
-
-
 /* application variables
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
@@ -43,7 +41,6 @@ const app = express();
 
 // serve static files - every file in folder named 'public'
 app.use(express.static("public"));
-
 
 /* server(s)
 ------------------------------- */
