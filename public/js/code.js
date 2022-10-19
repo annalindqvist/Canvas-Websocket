@@ -79,13 +79,12 @@ websocket.addEventListener("message", (e) => {
         default:
             break;
     }
-
 });
 
 // -- function to reload page
 function reloadPage() {
     location.reload();
-}
+};
 
 // --- Set nickname and send to server ---
 setNickname.addEventListener("click", () => {
@@ -102,16 +101,14 @@ setNickname.addEventListener("click", () => {
         logInContainer.style.display = 'none';
         chat.style.display = 'block';
     } else {
-        document.getElementById("nicknameHelper").classList.add("animate__animated")
-        document.getElementById("nicknameHelper").classList.add("animate__shakeX")
+        document.getElementById("nicknameHelper").classList.add("animate__animated");
+        document.getElementById("nicknameHelper").classList.add("animate__shakeX");
     }
-   
 });
 
 // --- Listen on input.value to send msg to chat ---
 // --- 1. Press enter to send
 inputText.addEventListener("keydown", (e) => {
-
     if (e.key !== "Enter") {
         lastKeyPress = new Date().getTime();
     }
@@ -120,13 +117,10 @@ inputText.addEventListener("keydown", (e) => {
         isTyping = false;
         sendTypingToServer();
     }
-    
-
 });
 
 // --- 2. Press on btn to send
 sendBtn.addEventListener("click", (e) => {
-
     if (e.target == sendBtn && inputText.value.length > 0) {
         handleMessage();
         isTyping = false;
@@ -136,81 +130,69 @@ sendBtn.addEventListener("click", (e) => {
         canvasTools.style.display = 'none'
         inputText.style.display = 'block';
         trigger.style.display = 'flex';
-        saveImgToUrl()
+        saveImgToUrl();
     }
 });
 // --- Listen on keypress and send timestamp to server for visual feedback
 inputText.addEventListener("keypress", (e) => {
-
     let timestamp = new Date().getTime();
     let objMessage = {
         type: "someoneIsTyping",
         nickname: nickname,
         time: timestamp,
     };
-
     websocket.send(JSON.stringify(objMessage));
-})
+});
 
 // --- Check if someone is typing 
 function checkIsTyping() {
-
     let timeNow = new Date().getTime();
     let timeDifferense;
     if (lastKeyPress) {
-
         timeDifferense = lastKeyPress + 4000;
-
         // 4sek + 1sek from setinterval in websocket open 
         if (timeNow < timeDifferense) {
-            console.log("timedifferense less than 5sek", timeDifferense)
             isTyping = true;
-
         } else if (timeNow > timeDifferense) {
-            console.log("timedifferense bigger than 5sek", timeDifferense)
             lastKeyPress = "";
             isTyping = false;
-
         }
         sendTypingToServer();
-
     }
-}
+};
 
+// -- chatscroll to bottom instead of top of chat
 function scrollToBottom() {
     chatThread.scrollTop = chatThread.scrollHeight;
-}
+};
 
-
+// -- send isTyping status to server
 function sendTypingToServer() {
     let objMessage = {
         type: "someoneIsTyping",
         msg: isTyping,
         nickname: nickname,
     };
-
-    // send to server
     websocket.send(JSON.stringify(objMessage));
-}
+};
 
 // --- Visual feedback if someone is typing ---
 function someoneIsTyping(obj) {
-
     console.log("test frontend someoneistyping", obj)
     if (obj.msg === false) {
         chatfeedback.innerHTML = "";
         //chatFeedback.style.display = 'none';
 
     } else if (obj.msg === true) {
+
         chatfeedback.innerHTML = "";
         let whoIsTyping = document.createElement("p");
-        whoIsTyping.className = "chatfeedback";
+        whoIsTyping.className = "typingFeedback";
         whoIsTyping.innerText = obj.nickname + " is typing...";
         chatfeedback.appendChild(whoIsTyping);
-        //chatFeedback.style.display = 'inline-block';
     }
 }
-
+// -- handle if someone typed a message and send to server
 function handleMessage() {
 
     let objMessage = {
@@ -218,26 +200,19 @@ function handleMessage() {
         msg: inputText.value,
         nickname: nickname,
     };
-
     // show new message for this user
-    // className to show my messages to right
     let className = "alignRight";
     renderMessage(objMessage, className);
-
     // send to server
     websocket.send(JSON.stringify(objMessage));
-
     // reset input field
     inputText.value = "";
-
-}
-
+};
 
 /* functions...
 ------------------------------- */
 // Returns current time like "12:15"
 function currentTime() {
-
     let dayTime = new Date();
     let time = dayTime.toLocaleTimeString([], {
         hour: '2-digit',
@@ -246,7 +221,6 @@ function currentTime() {
     return time;
 }
 
-// -- KOLLA PÅ DENNA! catch error??
 function parseJSON(data) {
     // try to parse json
     try {
@@ -254,20 +228,15 @@ function parseJSON(data) {
 
         return obj;
     } catch (error) {
-        // log to file in real application....
         return {
             error: "An error receving data...expected json format"
         };
     }
 }
 
-
 // --- Render messenge to client
 // obj.type to see if there is an textMessage, url(img)Message or someone logged in
-
 function renderMessage(obj, className) {
-
-
     switch (obj.type) {
 
         case "text":
@@ -316,8 +285,8 @@ function renderMessage(obj, className) {
     scrollToBottom();
 }
 
+//-- Visual feedback if someone left the chat
 function clientDisconnected(obj) {
-
     if (!obj) {
         return;
     }
@@ -332,10 +301,10 @@ function clientDisconnected(obj) {
     scrollToBottom();
 }
 
-// --- Clear canvas with white background---
+// --- 'Clear' canvas with white background---
 function clearCanvas() {
     const ctx = canvas.getContext('2d');
-    // White clear background of the canvas
+    // White background of the canvas
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -388,23 +357,19 @@ canvasTools.addEventListener("click", (e) => {
 // -- simple draw function
 function init(e) {
     const ctx = canvas.getContext('2d');
-
     canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
     canvas.height = window.innerHeight - 100;
     let lineWidth = 10;
-
     let isPainting = false;
     const initPaint = (e) => {
         isPainting = true;
         paint(e);
     };
-
     const finishPaint = () => {
         isPainting = false;
         ctx.stroke();
         ctx.beginPath();
     };
-
     const paint = (e) => {
         if (!isPainting) return;
         ctx.strokeStyle = colorOfPencil;
@@ -413,6 +378,12 @@ function init(e) {
         ctx.lineTo(e.clientX - chat.offsetLeft - lineWidth * 0.5, e.clientY - chat.offsetTop - lineWidth * 0.5);
         ctx.stroke();
     };
+    // quick-fix if you size the window the canvas doesnt draw correct. this will clear and start over.. 
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
+        canvas.height = window.innerHeight - 100;
+        clearCanvas();
+    })
     canvas.onmousedown = initPaint;
     canvas.onmousemove = paint;
     window.onmouseup = finishPaint;
@@ -424,19 +395,15 @@ window.onload = init;
 // https://github.com/joeattardi/picmo
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const picker = createPopup({}, {
         referenceElement: trigger,
         triggerElement: trigger,
         position: 'right-end'
     });
-
     trigger.addEventListener('click', () => {
         picker.toggle();
     });
-
     picker.addEventListener('emoji:select', (selection) => {
         inputText.value += selection.emoji;
     });
-
 });

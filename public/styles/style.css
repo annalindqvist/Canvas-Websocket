@@ -219,15 +219,23 @@ img {
     justify-content: left;
 }
 
-.chatfeedback {
+.chatfeedback{
     justify-content: left;
     margin-left: 2rem;
     background-color: rgb(131, 79, 192);
     border-radius: 1rem;
+    color: rgb(255, 254, 253);
+    max-width: fit-content;
+    padding: 0.5rem 1rem;
 }
+
 
 .chatfeedback p {
     color: rgb(255, 254, 253);
+}
+
+#typingFeedback {
+    margin-bottom: 6rem;
 }
 
 #bottomOfChat {
@@ -285,23 +293,7 @@ img {
     background-size: contain;
     width: 1.5rem;
     height: 1.5rem;
-    /* position: absolute;
-    top: 50%;
-    bottom: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    right: 0; */
-
 }
-
-/* #chatfeedback {
-    margin: 1rem;
-}
-
-#chatfeedback p {
-    padding: ;
-    background-color: green;
-}  */
 
 #canvasTools {
     display: none;
