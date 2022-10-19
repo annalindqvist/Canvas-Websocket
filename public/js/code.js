@@ -14,7 +14,7 @@ const sendBtn = document.getElementById("sendMsgBtn");
 const drawBtn = document.getElementById("drawBtn");
 const canvasTools = document.getElementById("canvasTools");
 const logInContainer = document.getElementById("logIn");
-const chatfeedback = document.getElementById("chatfeedback");
+const chatfeedback = document.getElementById("chatTypingfeedback");
 const trigger = document.querySelector('#trigger');
 
 // --- variables 
@@ -178,13 +178,9 @@ function sendTypingToServer() {
 
 // --- Visual feedback if someone is typing ---
 function someoneIsTyping(obj) {
-    console.log("test frontend someoneistyping", obj)
     if (obj.msg === false) {
         chatfeedback.innerHTML = "";
-        //chatFeedback.style.display = 'none';
-
     } else if (obj.msg === true) {
-
         chatfeedback.innerHTML = "";
         let whoIsTyping = document.createElement("p");
         whoIsTyping.className = "typingFeedback";

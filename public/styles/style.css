@@ -122,8 +122,12 @@
 
 #chatThread {
     list-style: none;
-    max-height: 80vh;
+    max-height: 75vh;
     overflow-y: scroll;
+}
+
+#chatTypingfeedback .typingFeedback {
+    margin: 1rem 0 8rem 1rem;
 }
 
 #chatThread li {
@@ -234,9 +238,6 @@ img {
     color: rgb(255, 254, 253);
 }
 
-#typingFeedback {
-    margin-bottom: 6rem;
-}
 
 #bottomOfChat {
     position: absolute;

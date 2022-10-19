@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <title>Document</title>
 </head>
-
 <body>
     <!-- input nickname -->
     <div id="logIn">
@@ -22,10 +21,7 @@
             <p id="nicknameHelper">*Min 1 character, max 10 characters</p>
             <div id="setNickname">Join chat!</div>
         </div>
-
-
     </div>
-
     <!-- DOM chat -->
     <div id="chat">
         <div id="onlineContainer">
@@ -33,11 +29,13 @@
             <p>Online:</p>
             <div id="onlineClients"></div>
         </div>
+    
+        <div id="chatThreadContainer">
+            <ul id="chatThread"></ul>
+            <canvas id="canvas" display="none"></canvas>
+            <div id="chatTypingfeedback"></div>
+        </div>
        
-        <ul id="chatThread"></ul>
-        <canvas id="canvas" display="none"></canvas>
-        <div id="chatfeedback"></div>
-
         <!-- input chat -->
         <div id="bottomOfChat">
             <div id="canvasTools">
@@ -52,7 +50,6 @@
                 <div id="brown"></div>
                 <div id="pink"></div>
             </div>
-
             <div id="chatInputs">
                 <div id="chatInputField">
                     <input type="text" id="inputText" placeholder="Pls, only nice messages">
@@ -63,19 +60,13 @@
                     <div id="sendMsgBtn"></div>
                 </div>
             </div>
-
             <!-- emojipicket from picmo -->
             <section id="selection-outer" class="empty">
                 <div id="selection">
                     <div id="selection-emoji" class="empty"></div>
                 </div>
             </section>
-
-
         </div>
-
-
-
     </div>
 
     <!-- server status -->
@@ -84,10 +75,8 @@
         <div id="serverDownGif"></div>
     </div>
 
-
     <!-- use template to set html structure for a message -->
     <template id="message">
-
         <li id="msgContainer">
             <p id="msgNickname"></p>
             <div id="chatMsgContainer">
@@ -96,11 +85,8 @@
             <img id="imgMsg" src="">
             <p id="msgTime"></p>
         </li>
-
     </template>
-
     <template id="imgMessage">
-
         <li id="imgMsgContainer">
             <p id="imgMsgNickname"></p>
             <!-- background img on div instead  of img tag?-->
@@ -110,23 +96,10 @@
 
             <p id="imgMsgTime"></p>
         </li>
-
-    </template>
-
-    <template id="isTypingmessage">
-
-        <li id="msgContainer">
-            <div id="chatMsgContainer">
-                <p id="chatMsgContent"></p>
-            </div>
-        </li>
-
     </template>
 
     <script src="https://unpkg.com/@picmo/popup-picker@latest/dist/umd/index.js"></script>
-
     <script type="module" src="js/code.js"></script>
-
 </body>
 
 </html>
