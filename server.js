@@ -28,8 +28,13 @@ import {
 /* application variables
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
+// port 3000 if you want to host it on ex. render.com
 //const port = 3000;
+// I use port 80 to open with locanhost
 const port = 80;
+
+let connectedClients = [];
+let disconnectedClient;
 
 /* express
 ------------------------------- */
@@ -50,10 +55,6 @@ const wss = new WebSocketServer({
     noServer: true
 });
 
-
-
-
-
 /* allow websockets - listener
 ------------------------------- */
 // upgrade event - websocket communication
@@ -68,9 +69,6 @@ server.on("upgrade", (req, socket, head) => {
     });
 });
 
-let connectedClients = [];
-let disconnectedClient;
-
 wss.uniqueId = function () {
     let id = uuidv4();
     return id;
@@ -84,25 +82,22 @@ wss.on("connection", (ws) => {
 
     ws.id = wss.uniqueId();
 
-    wss.clients.forEach(client => {
-        console.log("client id: ", client.id)
-        // client.send(`{"id": "${client.id}}`)
-    })
+    // wss.clients.forEach(client => {
+    //     console.log("client id: ", client.id)
+    // })
 
     // --- WebSocket events (ws) for single client ---
 
     // -- close event
     ws.on("close", () => {
-        // Får ut id:t på den som lämnar
-        console.log("Client disconnected", ws.id);
         console.log(
             "Number of remaining connected clients: ",
             wss.clients.size
         );
-
+        // ws.id = id on client who disconnects
+        // search for it in connectedClients
         disconnectedClient = connectedClients.find(c => c.id === ws.id);
-        console.log("test disconnectedClients", disconnectedClient)
-        console.log("test connectedCleints", connectedClients)
+        // --- If disconnectedClient exists in connectedClients then we remove and update array
         if (disconnectedClient) {
             let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
             connectedClients.splice(indexOfDisconnectedClient, 1);
@@ -116,18 +111,6 @@ wss.on("connection", (ws) => {
                 }))
             });
         }
-        // let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
-        // connectedClients.splice(indexOfDisconnectedClient, 1);
-
-        // wss.clients.forEach(client => {
-
-        //     client.send(JSON.stringify({
-        //         type: 'disconnect',
-        //         onlineClients: connectedClients,
-        //         disconnectedClient: disconnectedClient,
-        //     }))
-        // });
-
     });
 
     // -- message event
@@ -146,27 +129,26 @@ wss.on("connection", (ws) => {
                     msg: obj.msg,
                     nickname: obj.nickname,
                 };
-                console.log("case text", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
-
                 break;
 
             case "url":
+                // -- imagemessage
                 objBroadcast = {
                     type: "url",
                     msg: obj.msg,
                     nickname: obj.nickname,
                 };
-                console.log("case url", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
                 break;
             case "newClient": {
+                // -- sets unique id 
                 const id = ws.id;
-
                 let newObj = {
                     nickname: obj.nickname,
                     id: id,
                 }
+                // -- push new client to array of connectedClients
                 connectedClients.push(newObj);
 
                 objBroadcast = {
@@ -179,8 +161,6 @@ wss.on("connection", (ws) => {
                 wss.clients.forEach((client) => {
                     client.send(JSON.stringify(objBroadcast));
                 });
-                // visar inte inloggade förän nästa händelse sker, enbart login eller alla händelser?
-                //broadcastButExclude(wss, ws, objBroadcast);
                 break;
             }
             case "someoneIsTyping": {
@@ -189,7 +169,6 @@ wss.on("connection", (ws) => {
                     nickname: obj.nickname,
                     msg: obj.msg,
                 };
-                //console.log("case someoneIsTyping", objBroadcast)
                 broadcastButExclude(wss, ws, objBroadcast);
 
                 break;
