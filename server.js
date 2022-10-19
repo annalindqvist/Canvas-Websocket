@@ -29,9 +29,9 @@ import {
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
 // port 3000 if you want to host it on ex. render.com
-const port = 3000;
+//const port = 3000;
 // I use port 80 to open with locanhost
-//const port = 80;
+const port = 80;
 
 let connectedClients = [];
 let disconnectedClient;
@@ -60,11 +60,9 @@ const wss = new WebSocketServer({
 // upgrade event - websocket communication
 server.on("upgrade", (req, socket, head) => {
     console.log("Upgrade event client: ", req.headers);
-
     // start websocket
     wss.handleUpgrade(req, socket, head, (ws) => {
         console.log("let user use websocket...");
-
         wss.emit("connection", ws, req);
     });
 });
@@ -81,10 +79,6 @@ wss.on("connection", (ws) => {
     console.log("Number of connected clients: ", wss.clients.size);
 
     ws.id = wss.uniqueId();
-
-    // wss.clients.forEach(client => {
-    //     console.log("client id: ", client.id)
-    // })
 
     // --- WebSocket events (ws) for single client ---
 
@@ -117,7 +111,6 @@ wss.on("connection", (ws) => {
     ws.on("message", (data) => {
 
         let obj = parseJSON(data);
-        console.log(obj)
         let objBroadcast = {};
 
         // -- obj property 'type' to handle message event

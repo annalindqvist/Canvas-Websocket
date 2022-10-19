@@ -1,5 +1,4 @@
 // imports
-
 import {
     createPopup
 } from 'https://unpkg.com/@picmo/popup-picker@latest/dist/index.js?module';
@@ -28,12 +27,12 @@ let colorOfPencil = black;
 
 // -- if hosting on ex render.com use (const baseURL, protocol & first constwebsocket)
 // --and comment out "const websocket = new WebSocket("ws://localhost:80");"
-const baseURL = window.location.href.split("//")[1];
-const protocol = 'wss';
-const websocket = new WebSocket(`${protocol}://${baseURL}`);
+//const baseURL = window.location.href.split("//")[1];
+//const protocol = 'wss';
+//const websocket = new WebSocket(`${protocol}://${baseURL}`);
 
 // -- open with localhost use this one
-//const websocket = new WebSocket("ws://localhost:80");
+const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
@@ -46,9 +45,9 @@ websocket.addEventListener("close", (e) => {
     setInterval(reloadPage, 4000);
 });
 
-// -- when ws is open, runs function checkIsTyping every 2 seconds (to see if someone is typing)
+// -- when ws is open, runs function checkIsTyping every second (to see if someone is typing)
 websocket.addEventListener("open", (e) => {
-    setInterval(checkIsTyping, 2000);
+    setInterval(checkIsTyping, 1000);
 
 });
 
@@ -121,11 +120,7 @@ inputText.addEventListener("keydown", (e) => {
         isTyping = false;
         sendTypingToServer();
     }
-    // -- Trodde denna kunde göra så den slutar "skriva" om man klickat på enter och det är tommt i fältet.. 
-    // if (e.key === "Enter" && inputText.value.length === 0) {
-    //     isTyping = false;
-    //     sendTypingToServer();
-    // }
+    
 
 });
 
@@ -140,6 +135,7 @@ sendBtn.addEventListener("click", (e) => {
         canvas.style.display = 'none';
         canvasTools.style.display = 'none'
         inputText.style.display = 'block';
+        trigger.style.display = 'flex';
         saveImgToUrl()
     }
 });
@@ -161,12 +157,11 @@ function checkIsTyping() {
 
     let timeNow = new Date().getTime();
     let timeDifferense;
-    //console.log("checkIsTyping", isTyping)
     if (lastKeyPress) {
 
-        timeDifferense = lastKeyPress + 5000;
+        timeDifferense = lastKeyPress + 4000;
 
-        // 5sek + 2sek from setinterval in websocket open 
+        // 4sek + 1sek from setinterval in websocket open 
         if (timeNow < timeDifferense) {
             console.log("timedifferense less than 5sek", timeDifferense)
             isTyping = true;
@@ -340,12 +335,12 @@ function clientDisconnected(obj) {
 // --- Clear canvas with white background---
 function clearCanvas() {
     const ctx = canvas.getContext('2d');
-
     // White clear background of the canvas
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
+// -- click on pen/drawBtn to open canvas/hide elements and the opposit
 drawBtn.addEventListener('click', (e) => {
     if (canvas.style.display != "block" && canvasTools.style.display != 'flex') {
         clearCanvas()
@@ -355,27 +350,25 @@ drawBtn.addEventListener('click', (e) => {
         trigger.style.display = 'none'
 
     } else if (canvas.style.display = "block" && canvasTools.style.display == 'flex') {
-        console.log("drawBtn onclick: canvas display: block");
         canvas.style.display = 'none';
         canvasTools.style.display = 'none';
         inputText.style.display = 'block';
-        trigger.style.display = 'block'
+        trigger.style.display = 'flex'
     }
 });
 
+// -- forEach online client create div with nickname
 function onlineClients(obj) {
-
     onlineClientsContainer.innerHTML = '';
     obj.forEach(client => {
-
         const nameBubble = document.createElement("div");
         nameBubble.innerText = client.nickname;
         onlineClientsContainer.appendChild(nameBubble)
     });
 };
 
+// -- save drawing to pgn and sent to server
 const saveImgToUrl = () => {
-
     let img = canvas.toDataURL('image/png');
     let imgMsg = {
         type: "url",
@@ -384,20 +377,17 @@ const saveImgToUrl = () => {
     };
     let className = "alignRight";
     renderMessage(imgMsg, className);
-    // send to server
     websocket.send(JSON.stringify(imgMsg));
 };
 
+// -- colorOfPencil will be color of div
 canvasTools.addEventListener("click", (e) => {
     colorOfPencil = e.target.id;
 });
 
+// -- simple draw function
 function init(e) {
     const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect()
-
-    // let startX = e.clientX - rect.left;
-    // let startY = e.clientY - rect.top;
 
     canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
     canvas.height = window.innerHeight - 100;
@@ -406,10 +396,7 @@ function init(e) {
     let isPainting = false;
     const initPaint = (e) => {
         isPainting = true;
-        // startX = e.offsetX;
-        // startY = chat.offsetTop;
-        // console.log("initpaint X", startX)
-        paint(e); // needed to be able to make dots
+        paint(e);
     };
 
     const finishPaint = () => {
@@ -423,25 +410,15 @@ function init(e) {
         ctx.strokeStyle = colorOfPencil;
         ctx.lineWidth = lineWidth;
         ctx.lineCap = 'round';
-        //console.log("paint X", e.clientX)
         ctx.lineTo(e.clientX - chat.offsetLeft - lineWidth * 0.5, e.clientY - chat.offsetTop - lineWidth * 0.5);
         ctx.stroke();
     };
     canvas.onmousedown = initPaint;
     canvas.onmousemove = paint;
     window.onmouseup = finishPaint;
-
-    canvas.ontouchstart = initPaint;
-    canvas.ontouchmove = initPaint;
-    window.ontouchend = initPaint;
-
 }
 
 window.onload = init;
-
-
-
-
 
 // --- EMOJI PICKER ---
 // https://github.com/joeattardi/picmo

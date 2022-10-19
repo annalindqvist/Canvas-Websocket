@@ -233,11 +233,11 @@ img {
 #bottomOfChat {
     position: absolute;
     bottom: 0;
-    /* display: flex; */
 }
 #chatInputs {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-bottom: 1rem;
     width: 100vw;
 }
@@ -251,12 +251,9 @@ img {
     margin: 0 0.5rem 0 0.5rem;
     
 }
-
 #chatInputBtns div:first-child {
     margin: 1rem;
 }
-
-
 #chatInputs #inputText {
     padding: 0.5rem 2.5rem 0.5rem 1.5rem;
     width: 100%;
@@ -280,11 +277,6 @@ img {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-
-/* 
-#bottomOfChat #drawBtn {
-    right: 1rem;
-} */
 
 #bottomOfChat #sendMsgBtn {
     background-image: url("https://img.icons8.com/external-soft-fill-juicy-fish/60/000000/external-send-love-soft-fill-soft-fill-juicy-fish-2.png");
