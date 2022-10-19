@@ -50,7 +50,7 @@ websocket.addEventListener("message", (e) => {
 
     let obj = parseJSON(e.data);
     let className = "alignLeft";
-  
+
     switch (obj.type) {
         case "text":
             renderMessage(obj, className);
@@ -78,7 +78,7 @@ websocket.addEventListener("message", (e) => {
 
 });
 
-function reloadPage () {
+function reloadPage() {
     location.reload();
 }
 
@@ -135,7 +135,7 @@ sendBtn.addEventListener("click", (e) => {
 });
 // --- Listen on keypress and send timestamp to server for visual feedback
 inputText.addEventListener("keypress", (e) => {
-   
+
     let timestamp = new Date().getTime();
     let objMessage = {
         type: "someoneIsTyping",
@@ -147,7 +147,7 @@ inputText.addEventListener("keypress", (e) => {
 })
 
 // --- Check if someone is typing 
-function checkIsTyping () {
+function checkIsTyping() {
 
     let timeNow = new Date().getTime();
     let timeDifferense;
@@ -161,19 +161,23 @@ function checkIsTyping () {
             console.log("timedifferense less than 5sek", timeDifferense)
             isTyping = true;
 
-        }
-        else if (timeNow > timeDifferense) {
-            console.log("timedifferense bigger than 5sek", timeDifferense) 
+        } else if (timeNow > timeDifferense) {
+            console.log("timedifferense bigger than 5sek", timeDifferense)
             lastKeyPress = "";
             isTyping = false;
-            
+
         }
         sendTypingToServer();
 
     }
 }
 
-function sendTypingToServer () {
+function scrollToBottom () {
+    chatThread.scrollTop = chatThread.scrollHeight;
+}
+
+
+function sendTypingToServer() {
     let objMessage = {
         type: "someoneIsTyping",
         msg: isTyping,
@@ -186,7 +190,7 @@ function sendTypingToServer () {
 
 // --- Visual feedback if someone is typing ---
 function someoneIsTyping(obj) {
-    
+
     console.log("test frontend someoneistyping", obj)
     if (obj.msg === false) {
         chatfeedback.innerHTML = "";
@@ -257,7 +261,7 @@ function parseJSON(data) {
 // obj.type to see if there is an textMessage, url(img)Message or someone logged in
 
 function renderMessage(obj, className) {
- 
+
     switch (obj.type) {
 
         case "text":
@@ -274,6 +278,7 @@ function renderMessage(obj, className) {
             newMsg.getElementById("msgTime").innerText = currentTime();
             // render using prepend method - last message first
             chatThread.appendChild(newMsg);
+           
 
             break;
         case "url":
@@ -301,6 +306,7 @@ function renderMessage(obj, className) {
         default:
             break;
     }
+    scrollToBottom();
 }
 
 function clientDisconnected(obj) {
