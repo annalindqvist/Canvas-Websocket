@@ -27,6 +27,7 @@
     font-weight: 600;
     font-size: 3rem;
     text-align: center;
+   
 }
 
 #logIn div {
@@ -318,6 +319,8 @@ img {
     background-color:#ececec;
     align-items: center;
     justify-content: center;
+    margin-left: 0.5rem;
+    padding: 1rem;
 }
 
 #canvasTools div {

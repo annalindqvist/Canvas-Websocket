@@ -16,6 +16,7 @@ const drawBtn = document.getElementById("drawBtn");
 const canvasTools = document.getElementById("canvasTools");
 const logInContainer = document.getElementById("logIn");
 const chatfeedback = document.getElementById("chatfeedback");
+const trigger = document.querySelector('#trigger');
 
 // --- variables 
 let nickname;
@@ -65,6 +66,7 @@ websocket.addEventListener("message", (e) => {
             onlineClients(obj.onlineClients);
         }
         case "disconnect": {
+            console.log("test", obj.onlineClients)
             onlineClients(obj.onlineClients);
             clientDisconnected(obj.disconnectedClient)
             break;
@@ -81,6 +83,7 @@ websocket.addEventListener("message", (e) => {
 function reloadPage() {
     location.reload();
 }
+
 
 
 // --- Set nickname and send to server ---
@@ -172,7 +175,7 @@ function checkIsTyping() {
     }
 }
 
-function scrollToBottom () {
+function scrollToBottom() {
     chatThread.scrollTop = chatThread.scrollHeight;
 }
 
@@ -262,6 +265,7 @@ function parseJSON(data) {
 
 function renderMessage(obj, className) {
 
+
     switch (obj.type) {
 
         case "text":
@@ -278,7 +282,7 @@ function renderMessage(obj, className) {
             newMsg.getElementById("msgTime").innerText = currentTime();
             // render using prepend method - last message first
             chatThread.appendChild(newMsg);
-           
+
 
             break;
         case "url":
@@ -340,11 +344,15 @@ drawBtn.addEventListener('click', (e) => {
         clearCanvas()
         canvas.style.display = 'block';
         canvasTools.style.display = 'flex'
+        inputText.style.display = 'none';
+        trigger.style.display = 'none'
 
     } else if (canvas.style.display = "block" && canvasTools.style.display == 'flex') {
         console.log("drawBtn onclick: canvas display: block");
         canvas.style.display = 'none';
-        canvasTools.style.display = 'none'
+        canvasTools.style.display = 'none';
+        inputText.style.display = 'block';
+        trigger.style.display = 'block'
     }
 });
 
@@ -432,7 +440,6 @@ window.onload = init;
 // https://github.com/joeattardi/picmo
 
 document.addEventListener('DOMContentLoaded', () => {
-    const trigger = document.querySelector('#trigger');
 
     const picker = createPopup({}, {
         referenceElement: trigger,

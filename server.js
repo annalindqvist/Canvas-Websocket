@@ -101,17 +101,32 @@ wss.on("connection", (ws) => {
         );
 
         disconnectedClient = connectedClients.find(c => c.id === ws.id);
-        let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
-        connectedClients.splice(indexOfDisconnectedClient, 1);
+        console.log("test disconnectedClients", disconnectedClient)
+        console.log("test connectedCleints", connectedClients)
+        if (disconnectedClient) {
+            let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
+            connectedClients.splice(indexOfDisconnectedClient, 1);
 
-        wss.clients.forEach(client => {
+            wss.clients.forEach(client => {
 
-            client.send(JSON.stringify({
-                type: 'disconnect',
-                onlineClients: connectedClients,
-                disconnectedClient: disconnectedClient,
-            }))
-        });
+                client.send(JSON.stringify({
+                    type: 'disconnect',
+                    onlineClients: connectedClients,
+                    disconnectedClient: disconnectedClient,
+                }))
+            });
+        }
+        // let indexOfDisconnectedClient = connectedClients.indexOf(disconnectedClient);
+        // connectedClients.splice(indexOfDisconnectedClient, 1);
+
+        // wss.clients.forEach(client => {
+
+        //     client.send(JSON.stringify({
+        //         type: 'disconnect',
+        //         onlineClients: connectedClients,
+        //         disconnectedClient: disconnectedClient,
+        //     }))
+        // });
 
     });
 
@@ -121,7 +136,7 @@ wss.on("connection", (ws) => {
         let obj = parseJSON(data);
         console.log(obj)
         let objBroadcast = {};
-       
+
         // -- obj property 'type' to handle message event
         switch (obj.type) {
             case "text":
