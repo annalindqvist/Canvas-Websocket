@@ -29,9 +29,9 @@ import {
 ------------------------------- */
 // set port number >>> make sure client javascript uses same WebSocket port!
 // port 3000 if you want to host it on ex. render.com
-//const port = 3000;
+const port = 3000;
 // I use port 80 to open with locanhost
-const port = 80;
+//const port = 80;
 
 let connectedClients = [];
 let disconnectedClient;
