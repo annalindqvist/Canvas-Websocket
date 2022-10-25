@@ -343,6 +343,7 @@ canvasTools.addEventListener("click", (e) => {
 
 // -- simple draw function
 function init(e) {
+    e.preventDefault();
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
     canvas.height = window.innerHeight - 100;
@@ -374,6 +375,12 @@ function init(e) {
     canvas.onmousedown = initPaint;
     canvas.onmousemove = paint;
     window.onmouseup = finishPaint;
+
+
+    canvas.addEventListener("touchstart", initPaint);
+    canvas.addEventListener("touchmove", paint);
+    window.addEventListener("touchend", finishPaint);
+
 }
 
 window.onload = init;
