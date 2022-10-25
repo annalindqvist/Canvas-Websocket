@@ -60,6 +60,9 @@ A new branch for the work I plan on doing after the presentation of this case.
 ###### Chat: 
 - [] when someone is typing and sends a message so fast that the text "... is typing" shows up after the message is sent. Should it be like that? 
 - [] overall design
+- [] emoji-picker mobile design
+- [] send image from mobile/computer..?
+- [] on mobile - open camera and take picture..?
 
 ###### Startpage;
 - [] overall design
