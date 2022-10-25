@@ -44,3 +44,25 @@ Minimum krav:
 - Funktionen om någon skriver, den bör sluta direkt när man klickar på skickaknappen, gör det inte nu. Räknar ner från senaste knapptrycket endå.
 - Designen behöver mer kärlek
 - Roligare canvas-funktion
+
+--------------------------------------
+# after-presentation branch
+A new branch for the work I plan on doing after the presentation of this case. 
+
+## Todo:
+
+###### Canvas: 
+- [] paint on mobile not only desktop
+- [] painting offset(?) when resizing screen
+- [] overall the canvas-popup design
+- [] choose from ALL colors not only a few
+
+###### Chat: 
+- [] when someone is typing and sends a message so fast that the text "... is typing" shows up after the message is sent. Should it be like that? 
+- [] overall design
+
+###### Startpage;
+- [] overall design
+
+###### Overall code: 
+- [] minimize functions
