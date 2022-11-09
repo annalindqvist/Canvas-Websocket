@@ -1,6 +1,12 @@
-# Canvas-Websocket
+# Case 8 - Canvas-Websocket
+
+
+###### There a alot of branches at the moment. Branch: release2.0 is hosted on render. Branch: feature, feature2.0 and release I wish to delete when I know how to. 
+###### Branch: after-presentation I created after the presentation of this case. My plan when/if I get the time, I wish to start with the todo-list in that branch-read me. 
 
 Welcome to my first schoolproject working with canvas and websocket. I have made an simple chat where you can send textmessages & add emojis from picmo's emojipicker. Also you paint an simple drawing with canvas and send as an image in the chat. 
+
+- The chat works best in desktop at the moment due to lack of time on the design. I focused on the functionality of the chat.
 
 - I have this project hosted on render.com. Check it out here: https://chitchatapp.onrender.com
 
