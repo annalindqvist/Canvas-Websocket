@@ -27,12 +27,12 @@ let colorOfPencil = black;
 
 // -- if hosting on ex render.com use (const baseURL, protocol & first constwebsocket)
 // --and comment out "const websocket = new WebSocket("ws://localhost:80");"
-const baseURL = window.location.href.split("//")[1];
-const protocol = 'wss';
-const websocket = new WebSocket(`${protocol}://${baseURL}`);
+//const baseURL = window.location.href.split("//")[1];
+//const protocol = 'wss';
+//const websocket = new WebSocket(`${protocol}://${baseURL}`);
 
 // -- open with localhost use this one
-//const websocket = new WebSocket("ws://localhost:80");
+const websocket = new WebSocket("ws://localhost:80");
 
 // --- EVENT LISTENERS ---
 
@@ -300,11 +300,13 @@ function clearCanvas() {
 // -- click on pen/drawBtn to open canvas/hide elements and the opposit
 drawBtn.addEventListener('click', (e) => {
     if (canvas.style.display != "block" && canvasTools.style.display != 'flex') {
-        clearCanvas()
+        // clearCanvas()
         canvas.style.display = 'block';
         canvasTools.style.display = 'flex'
         inputText.style.display = 'none';
         trigger.style.display = 'none'
+        init();
+        clearCanvas()
     } else if (canvas.style.display = "block" && canvasTools.style.display == 'flex') {
         canvas.style.display = 'none';
         canvasTools.style.display = 'none';
@@ -343,7 +345,7 @@ canvasTools.addEventListener("click", (e) => {
 
 // -- simple draw function
 function init(e) {
-    e.preventDefault();
+
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth - (chat.offsetLeft * 2) - 4;
     canvas.height = window.innerHeight - 100;
@@ -376,14 +378,13 @@ function init(e) {
     canvas.onmousemove = paint;
     window.onmouseup = finishPaint;
 
-
     canvas.addEventListener("touchstart", initPaint);
     canvas.addEventListener("touchmove", paint);
     window.addEventListener("touchend", finishPaint);
 
 }
 
-window.onload = init;
+//window.onload = init;
 
 // --- EMOJI PICKER ---
 // https://github.com/joeattardi/picmo
